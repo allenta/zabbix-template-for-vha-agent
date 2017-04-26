@@ -522,7 +522,7 @@
                             <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].last()}&lt;600</expression>
                             <name>VHA Agent[{#LOCATION}] has been restarted</name>
                             <url/>
-                            <status>1</status>
+                            <status>0</status>
                             <priority>4</priority>
                             <description/>
                             <type>0</type>
@@ -531,7 +531,7 @@
                             <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;].min(#10)}&gt;0.0</expression>
                             <name>VHA Agent[{#LOCATION}] is dropping requests</name>
                             <url/>
-                            <status>1</status>
+                            <status>0</status>
                             <priority>2</priority>
                             <description/>
                             <type>0</type>
@@ -540,7 +540,7 @@
                             <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;].min(#10)}&gt;0.0</expression>
                             <name>VHA Agent[{#LOCATION}] is failing to notify peers</name>
                             <url/>
-                            <status>1</status>
+                            <status>0</status>
                             <priority>2</priority>
                             <description/>
                             <type>0</type>
@@ -750,7 +750,7 @@
             <expression>{Template App VHA Agent:proc.num[vha-agent].last()}&lt;1</expression>
             <name>VHA Agent is not running</name>
             <url/>
-            <status>1</status>
+            <status>0</status>
             <priority>5</priority>
             <description/>
             <type>0</type>

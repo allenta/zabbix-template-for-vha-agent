@@ -16,4 +16,4 @@
 
 6. Add an existing / new host to the ``Varnish Cache servers`` group and link it to the ``Template App VHA Agent`` template. Beware you must set a value for the ``{$VHA_AGENT_LOCATIONS}`` macro (comma-delimited list of VHA Agent status files). Usually you should leave its value blank when running a single VHA Agent instance per server (i.e. the default location will be used: ``/var/lib/vha-agent/vha-status``).
 
-7. Enable and adjust triggers and trigger prototypes (initially all of them are disabled) according with your preferences.
+7. Enable triggers and trigger prototypes according with your preferences.
