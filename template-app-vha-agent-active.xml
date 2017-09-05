@@ -145,35 +145,6 @@
                             <logtimefmt/>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes>
-                        <trigger_prototype>
-                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].last()}&lt;600</expression>
-                            <name>VHA Agent[{#LOCATION}] has been restarted</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;].min(#10)}&gt;0.0</expression>
-                            <name>VHA Agent[{#LOCATION}] is dropping requests</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>2</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;].min(#10)}&gt;0.0</expression>
-                            <name>VHA Agent[{#LOCATION}] is failing to notify peers</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>2</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                    </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
                             <name>VHA Agent[{#LOCATION}] &gt; Backlogs[{#SUBJECT}]: length</name>
@@ -545,7 +516,35 @@
                             <logtimefmt/>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes/>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].last()}&lt;600</expression>
+                            <name>VHA Agent[{#LOCATION}] has been restarted</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;].min(#10)}&gt;0.0</expression>
+                            <name>VHA Agent[{#LOCATION}] is dropping requests</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;].min(#10)}&gt;0.0</expression>
+                            <name>VHA Agent[{#LOCATION}] is failing to notify peers</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description/>
+                            <type>0</type>
+                        </trigger_prototype>
+                    </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
                             <name>VHA Agent[{#LOCATION}] &gt; Backlog length</name>
