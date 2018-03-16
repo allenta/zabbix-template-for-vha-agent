@@ -2,8 +2,8 @@
 # vi: set ft=ruby :
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'ubuntu/trusty64'
-  config.vm.box_version = '=14.04'
+  config.vm.box = 'ubuntu/xenial64'
+  config.vm.box_version = '=20180315.0.0'
   config.vm.box_check_update = true
 
   config.ssh.forward_agent = true
@@ -19,6 +19,7 @@ Vagrant.configure('2') do |config|
       '--accelerate3d', 'off',
       '--audio', 'none',
       '--paravirtprovider', 'Default',
+      '--uartmode1', 'disconnected',
     ]
   end
 
@@ -35,8 +36,8 @@ Vagrant.configure('2') do |config|
     machine.vm.provision :salt do |salt|
       salt.pillar({
         'varnish-plus' => {
-          'user' => ENV['VARNISH_PLUS_USER'],
-          'password' => ENV['VARNISH_PLUS_PASSWORD'],
+          'user' => ENV['VARNISH_PLUS_6_PACKAGECLOUD_USER'],
+          'password' => ENV['VARNISH_PLUS_6_PACKAGECLOUD_PASSWORD'],
         },
         'mysql.root' => {
           'password' => 's3cr3t',

@@ -1,22 +1,22 @@
-varnish.4.1-plus-repository:
-  pkgrepo.managed:
-    - humanname: Varnish 4.1 Plus
-    - name: deb https://{{ pillar['varnish-plus']['user'] }}:{{ pillar['varnish-plus']['password'] }}@repo.varnish-software.com/ubuntu/ trusty varnish-4.1-plus
-    - file: /etc/apt/sources.list.d/varnish.list
-    - enabled: 1
-    - key_url: https://{{ pillar['varnish-plus']['user'] }}:{{ pillar['varnish-plus']['password'] }}@repo.varnish-software.com/GPG-key.txt
-    - require_in:
-      - pkg: varnish.packages
+varnish.6.0-plus-key:
+  cmd.run:
+    - user: root
+    - name: |
+        set -e
+        curl -L https://{{ pillar['varnish-plus']['user'] }}:{{ pillar['varnish-plus']['password'] }}@packagecloud.io/varnishplus/60/gpgkey | apt-key add -
+    - require:
+      - sls: global
 
-varnish.4.1-plus-non-free-repository:
+varnish.6.0-plus-repository:
   pkgrepo.managed:
-    - humanname: Varnish 4.1 Plus VAC
-    - name: deb https://{{ pillar['varnish-plus']['user'] }}:{{ pillar['varnish-plus']['password'] }}@repo.varnish-software.com/ubuntu/ trusty non-free
+    - humanname: Varnish 6.0 Plus
+    - name: deb https://{{ pillar['varnish-plus']['user'] }}:{{ pillar['varnish-plus']['password'] }}@packagecloud.io/varnishplus/60/ubuntu/ xenial main
+    #- key_url: https://{{ pillar['varnish-plus']['user'] }}:{{ pillar['varnish-plus']['password'] }}@packagecloud.io/varnishplus/60/gpgkey
     - file: /etc/apt/sources.list.d/varnish.list
-    - enabled: 1
-    - key_url: https://{{ pillar['varnish-plus']['user'] }}:{{ pillar['varnish-plus']['password'] }}@repo.varnish-software.com/GPG-key.txt
     - require_in:
       - pkg: varnish.packages
+    - require:
+      - cmd: varnish.6.0-plus-key
 
 varnish.packages:
   pkg.installed:
