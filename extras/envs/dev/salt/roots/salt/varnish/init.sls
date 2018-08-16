@@ -1,6 +1,6 @@
 varnish.6.0-plus-key:
   cmd.run:
-    - user: root
+    - runas: root
     - name: |
         set -e
         curl -L https://{{ pillar['varnish-plus']['user'] }}:{{ pillar['varnish-plus']['password'] }}@packagecloud.io/varnishplus/60/gpgkey | apt-key add -
