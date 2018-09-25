@@ -145,6 +145,7 @@
                             <logtimefmt/>
                         </item_prototype>
                     </item_prototypes>
+                    <trigger_prototypes/>
                     <graph_prototypes>
                         <graph_prototype>
                             <name>VHA Agent[{#LOCATION}] &gt; Backlogs[{#SUBJECT}]: length</name>
