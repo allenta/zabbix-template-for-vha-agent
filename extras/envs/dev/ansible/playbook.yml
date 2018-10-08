@@ -1,0 +1,10 @@
+- hosts: all
+  become: yes
+  tasks:
+    - import_tasks: global/tasks.yml
+    - import_tasks: varnish/tasks.yml
+    - import_tasks: user/tasks.yml
+    - import_tasks: zabbix/tasks.yml
+  handlers:
+    - import_tasks: varnish/handlers.yml
+    - import_tasks: zabbix/handlers.yml
