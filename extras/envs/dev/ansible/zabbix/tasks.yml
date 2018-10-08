@@ -22,8 +22,6 @@
   notify:
     - restart-zabbix-server
     - restart-zabbix-agent
-    - restart-mysql
-    - restart-apache2
   user:
     name: zabbix
     groups: sudo
