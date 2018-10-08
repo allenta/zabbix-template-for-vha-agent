@@ -5,11 +5,6 @@
         deb: http://repo.zabbix.com/zabbix/3.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.4-1+xenial_all.deb
 
     - name: Install Zabbix packages
-      notify:
-        - restart-zabbix-server
-        - restart-zabbix-agent
-        - restart-apache2
-        - restart-mysql
       apt:
         name:
           - zabbix-agent
@@ -17,6 +12,18 @@
           - zabbix-sender
           - zabbix-server-mysql
         update_cache: True
+
+- name: Enable & start MySQL service
+  service:
+    name: mysql
+    enabled: yes
+    state: started
+
+- name: Enable & start Apache2 service
+  service:
+    name: apache2
+    enabled: yes
+    state: started
 
 - name: Grant sudo permissions to user 'zabbix'
   notify:
@@ -55,6 +62,12 @@
     regexp: ^\s*#?\s*{{ item.name }}\s*=\s*.*
     line: '{{ item.name }}={{ item.value }}'
 
+- name: Enable & start Zabbix Server service
+  service:
+    name: zabbix-server
+    enabled: yes
+    state: started
+
 - name: Configure Zabbix Agent
   notify: restart-zabbix-agent
   loop:
@@ -63,6 +76,12 @@
   lineinfile:
     path: /etc/zabbix/zabbix_agentd.conf
     line: '{{ item.name }}={{ item.value }}'
+
+- name: Enable & start Zabbix Agent service
+  service:
+    name: zabbix-agent
+    enabled: yes
+    state: started
 
 - name: Configure MySQL
   block:

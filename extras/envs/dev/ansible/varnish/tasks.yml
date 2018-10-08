@@ -18,14 +18,17 @@
         update_cache: True
 
 - name: Install Varnish packages
-  notify:
-    - restart-varnish
-    - restart-vha-agent
   apt:
     name:
       - varnish-plus
       - varnish-plus-ha
     update_cache: True
+
+- name: Enable & start VCP service
+  service:
+    name: varnish
+    enabled: yes
+    state: started
 
 - name: Create VCP nodes.conf
   notify:
@@ -62,3 +65,9 @@
       when: set_vha_agent_unit.changed
       systemd:
         daemon_reload: yes
+
+- name: Enable & start VHA Agent service
+  service:
+    name: vha-agent
+    enabled: yes
+    state: started

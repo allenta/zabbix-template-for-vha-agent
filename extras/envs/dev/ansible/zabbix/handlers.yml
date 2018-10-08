@@ -1,27 +1,17 @@
-- name: Enable & (re)start Zabbix Server
+- name: Restart Zabbix Server service
   listen: restart-zabbix-server
   service:
     name: zabbix-server
-    enabled: yes
     state: restarted
 
-- name: Enable & (re)start Zabbix Agent
+- name: Restart Zabbix Agent service
   listen: restart-zabbix-agent
   service:
     name: zabbix-agent
-    enabled: yes
     state: restarted
 
-- name: Enable & (re)start MySQL
-  listen: restart-mysql
-  service:
-    name: mysql
-    enabled: yes
-    state: restarted
-
-- name: Enable & (re)start Apache2
+- name: Restart Apache service
   listen: restart-apache2
   service:
     name: apache2
-    enabled: yes
     state: restarted

@@ -1,13 +1,5 @@
-- name: Enable & (re)start VCP
-  listen: restart-varnish
-  service:
-    name: varnish
-    enabled: yes
-    state: restarted
-
-- name: Enable & (re)start VHA
+- name: Restart VHA Agent service
   listen: restart-vha-agent
   service:
     name: vha-agent
-    enabled: yes
     state: restarted
