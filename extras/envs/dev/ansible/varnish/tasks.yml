@@ -2,6 +2,7 @@
   block:
     - set_fact:
         varnish_repo_key_url: https://{{ settings['varnish-plus'].user }}@packagecloud.io/varnishplus/60/gpgkey
+
     - name: Add Varnish Plus repo key
       shell: |
         set -e
@@ -27,6 +28,8 @@
     update_cache: True
 
 - name: Create VCP nodes.conf
+  notify:
+    - restart-vha-agent
   copy:
     dest: /etc/varnish/nodes.conf
     content: |

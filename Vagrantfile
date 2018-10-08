@@ -33,7 +33,6 @@ Vagrant.configure('2') do |config|
       ]
     end
 
-    # Provisioning.
     machine.vm.synced_folder 'extras/envs/dev/ansible', '/srv/ansible', :nfs => false
     machine.vm.provision 'ansible', type: 'ansible_local' do |ansible|
       ansible.playbook = '/srv/ansible/playbook.yml'
@@ -41,7 +40,6 @@ Vagrant.configure('2') do |config|
       ansible.extra_vars = {'settings' => {
         'varnish-plus' => {
           'user' => ENV['VARNISH_PLUS_6_PACKAGECLOUD_USER'],
-          'password' => ENV['VARNISH_PLUS_6_PACKAGECLOUD_PASSWORD'],
         },
         'mysql.root' => {
           'password' => 's3cr3t',

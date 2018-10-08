@@ -1,4 +1,4 @@
-- name: Color prompt
+- name: Configure color prompt
   replace:
     dest: /home/vagrant/.bashrc
     regexp: '#force_color_prompt=yes'

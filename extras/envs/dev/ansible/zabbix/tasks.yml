@@ -18,18 +18,18 @@
           - zabbix-server-mysql
         update_cache: True
 
-    - name: Grant sudo permissions to user 'zabbix'
-      notify:
-        - restart-zabbix-server
-        - restart-zabbix-agent
-        - restart-mysql
-        - restart-apache2
-      user:
-        name: zabbix
-        groups: sudo
-        append: yes
+- name: Grant sudo permissions to user 'zabbix'
+  notify:
+    - restart-zabbix-server
+    - restart-zabbix-agent
+    - restart-mysql
+    - restart-apache2
+  user:
+    name: zabbix
+    groups: sudo
+    append: yes
 
-- name: Configure Zabbix Frotend timezone(PHP)
+- name: Configure Zabbix Frotend timezone (PHP)
   notify: restart-apache2
   replace:
     path: /etc/apache2/conf-available/zabbix.conf
@@ -48,7 +48,7 @@
 - name: Configure Zabbix Server
   notify: restart-zabbix-server
   loop:
-    - { name: DBHost, value: '127.0.0.1' }
+    - { name: DBHost, value: 127.0.0.1 }
     - { name: DBName, value: "{{ settings['mysql.zabbix'].name }}" }
     - { name: DBUser, value: "{{ settings['mysql.zabbix'].user }}" }
     - { name: DBPassword, value: "{{ settings['mysql.zabbix'].password }}" }
