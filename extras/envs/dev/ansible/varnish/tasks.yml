@@ -46,8 +46,9 @@
         state: directory
 
     - name: Create override.conf for VHA Agent unit
-      notify: restart-vha-agent
-      register: set_vha_agent_unit
+      notify:
+        - reload-systemctl-daemon
+        - restart-vha-agent
       copy:
         dest: /etc/systemd/system/vha-agent.service.d/override.conf
         content: |
@@ -60,11 +61,6 @@
               -m localhost \
               -p stat_intvl=1 \
               -N /etc/varnish/nodes.conf -s /var/lib/vha-agent/vha-status -T s3cr3t
-
-    - name: Execute systemctl daemon-reload
-      when: set_vha_agent_unit.changed
-      systemd:
-        daemon_reload: yes
 
 - name: Enable & start VHA Agent service
   service:
