@@ -51,9 +51,9 @@ Vagrant.configure('2') do |config|
             'password' => 'zabbix',
           },
         }
-     }
-     ansible.install_mode = 'pip'
-     ansible.version = '2.6.4'
+      }
+      ansible.install_mode = 'pip'
+      ansible.version = '2.6.4'
     end
 
     machine.vm.network :public_network
