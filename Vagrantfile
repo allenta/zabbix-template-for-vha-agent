@@ -37,19 +37,20 @@ Vagrant.configure('2') do |config|
     machine.vm.provision 'ansible', type: 'ansible_local' do |ansible|
       ansible.playbook = '/srv/ansible/playbook.yml'
       ansible.verbose = 'v'
-      ansible.extra_vars = {'settings' => {
-        'varnish-plus' => {
-          'user' => ENV['VARNISH_PLUS_6_PACKAGECLOUD_USER'],
-        },
-        'mysql.root' => {
-          'password' => 's3cr3t',
-        },
-        'mysql.zabbix' => {
-          'name' => 'zabbix',
-          'user' => 'zabbix',
-          'password' => 'zabbix',
-        },
-      }
+      ansible.extra_vars = {
+        'settings' => {
+          'varnish-plus' => {
+            'user' => ENV['VARNISH_PLUS_6_PACKAGECLOUD_USER'],
+          },
+          'mysql.root' => {
+            'password' => 's3cr3t',
+          },
+          'mysql.zabbix' => {
+            'name' => 'zabbix',
+            'user' => 'zabbix',
+            'password' => 'zabbix',
+          },
+        }
      }
      ansible.install_mode = 'pip'
      ansible.version = '2.6.4'
