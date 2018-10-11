@@ -25,64 +25,6 @@
     enabled: yes
     state: started
 
-- name: Grant sudo permissions to user 'zabbix'
-  notify:
-    - restart-zabbix-server
-    - restart-zabbix-agent
-  user:
-    name: zabbix
-    groups: sudo
-    append: yes
-
-- name: Configure Zabbix Frotend timezone (PHP)
-  notify: restart-apache2
-  replace:
-    path: /etc/apache2/conf-available/zabbix.conf
-    regexp: ^\s*#?\s*php_value\s*date\.timezone\s*.*
-    replace: php_value date.timezone Europe/Madrid
-
-- name: Configure Zabbix Frontend
-  notify: restart-apache2
-  template:
-    src: zabbix/zabbix.conf.php.tmpl
-    dest: /etc/zabbix/web/zabbix.conf.php
-    owner: www-data
-    group: www-data
-    mode: 644
-
-- name: Configure Zabbix Server
-  notify: restart-zabbix-server
-  loop:
-    - { name: DBHost, value: 127.0.0.1 }
-    - { name: DBName, value: "{{ settings['mysql.zabbix'].name }}" }
-    - { name: DBUser, value: "{{ settings['mysql.zabbix'].user }}" }
-    - { name: DBPassword, value: "{{ settings['mysql.zabbix'].password }}" }
-  lineinfile:
-    path: /etc/zabbix/zabbix_server.conf
-    regexp: ^\s*#?\s*{{ item.name }}\s*=\s*.*
-    line: '{{ item.name }}={{ item.value }}'
-
-- name: Enable & start Zabbix Server service
-  service:
-    name: zabbix-server
-    enabled: yes
-    state: started
-
-- name: Configure Zabbix Agent
-  notify: restart-zabbix-agent
-  loop:
-    - { name: UserParameter, value: "vha_agent.discovery[*],sudo /vagrant/zabbix-vha-agent.py -i '$1' discover '$2'" }
-    - { name: Hostname, value: dev }
-  lineinfile:
-    path: /etc/zabbix/zabbix_agentd.conf
-    line: '{{ item.name }}={{ item.value }}'
-
-- name: Enable & start Zabbix Agent service
-  service:
-    name: zabbix-agent
-    enabled: yes
-    state: started
-
 - name: Configure MySQL
   block:
     - name: Disable MySQL auth socket plugin
@@ -130,3 +72,61 @@
         touch /home/vagrant/.vagrant.zabbix.mysql-create-schema
       args:
         creates: /home/vagrant/.vagrant.zabbix.mysql-create-schema
+
+- name: Grant sudo permissions to user 'zabbix'
+  notify:
+    - restart-zabbix-server
+    - restart-zabbix-agent
+  user:
+    name: zabbix
+    groups: sudo
+    append: yes
+
+- name: Configure Zabbix Frotend timezone (PHP)
+  notify: restart-apache2
+  replace:
+    path: /etc/apache2/conf-available/zabbix.conf
+    regexp: ^\s*#?\s*php_value\s*date\.timezone\s*.*
+    replace: php_value date.timezone Europe/Madrid
+
+- name: Configure Zabbix Frontend
+  notify: restart-apache2
+  template:
+    src: zabbix/zabbix.conf.php.tmpl
+    dest: /etc/zabbix/web/zabbix.conf.php
+    owner: www-data
+    group: www-data
+    mode: 0644
+
+- name: Configure Zabbix Server
+  notify: restart-zabbix-server
+  loop:
+    - { name: DBHost, value: 127.0.0.1 }
+    - { name: DBName, value: "{{ settings['mysql.zabbix'].name }}" }
+    - { name: DBUser, value: "{{ settings['mysql.zabbix'].user }}" }
+    - { name: DBPassword, value: "{{ settings['mysql.zabbix'].password }}" }
+  lineinfile:
+    path: /etc/zabbix/zabbix_server.conf
+    regexp: ^\s*#?\s*{{ item.name }}\s*=\s*.*
+    line: '{{ item.name }}={{ item.value }}'
+
+- name: Enable & start Zabbix Server service
+  service:
+    name: zabbix-server
+    enabled: yes
+    state: started
+
+- name: Configure Zabbix Agent
+  notify: restart-zabbix-agent
+  loop:
+    - { name: UserParameter, value: "vha_agent.discovery[*],sudo /vagrant/zabbix-vha-agent.py -i '$1' discover '$2'" }
+    - { name: Hostname, value: dev }
+  lineinfile:
+    path: /etc/zabbix/zabbix_agentd.conf
+    line: '{{ item.name }}={{ item.value }}'
+
+- name: Enable & start Zabbix Agent service
+  service:
+    name: zabbix-agent
+    enabled: yes
+    state: started
