@@ -73,14 +73,13 @@
       args:
         creates: /home/vagrant/.vagrant.zabbix.mysql-create-schema
 
-- name: Grant sudo permissions to user 'zabbix'
+- name: Grant sudo persmissions to user 'zabbix'
   notify:
     - restart-zabbix-server
     - restart-zabbix-agent
-  user:
-    name: zabbix
-    groups: sudo
-    append: yes
+  lineinfile:
+    path: /etc/sudoers
+    line: 'zabbix ALL=(ALL) NOPASSWD: /vagrant/zabbix-varnish-cache.py'
 
 - name: Configure Zabbix Frotend timezone (PHP)
   notify: restart-apache2
