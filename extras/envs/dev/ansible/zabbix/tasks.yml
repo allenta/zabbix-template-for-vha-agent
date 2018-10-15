@@ -77,10 +77,9 @@
   notify:
     - restart-zabbix-server
     - restart-zabbix-agent
-  user:
-    name: zabbix
-    groups: sudo
-    append: yes
+  lineinfile:
+    path: /etc/sudoers
+    line: 'zabbix ALL=(ALL) NOPASSWD: /vagrant/zabbix-varnish-cache.py'
 
 - name: Configure Zabbix Frotend timezone (PHP)
   notify: restart-apache2
