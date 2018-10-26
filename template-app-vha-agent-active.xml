@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>2.0</version>
-    <date>2016-07-19T19:42:19Z</date>
+    <version>3.4</version>
+    <date>2018-10-26T13:42:30Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -27,17 +27,15 @@
                     <name>Number of running processes ($1)</name>
                     <type>7</type>
                     <snmp_community/>
-                    <multiplier>0</multiplier>
                     <snmp_oid/>
                     <key>proc.num[vha-agent]</key>
-                    <delay>60</delay>
-                    <history>30</history>
-                    <trends>365</trends>
+                    <delay>{$VHA_AGENT_UPDATE_INTERVAL_ITEM:proc.num_vha-agent}</delay>
+                    <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:proc.num_vha-agent}</history>
+                    <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:proc.num_vha-agent}</trends>
                     <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
                     <units/>
-                    <delta>0</delta>
                     <snmpv3_contextname/>
                     <snmpv3_securityname/>
                     <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -45,11 +43,8 @@
                     <snmpv3_authpassphrase/>
                     <snmpv3_privprotocol>0</snmpv3_privprotocol>
                     <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
                     <params/>
                     <ipmi_sensor/>
-                    <data_type>0</data_type>
                     <authtype>0</authtype>
                     <username/>
                     <password/>
@@ -65,6 +60,9 @@
                     </applications>
                     <valuemap/>
                     <logtimefmt/>
+                    <preprocessing/>
+                    <jmx_endpoint/>
+                    <master_item/>
                 </item>
             </items>
             <discovery_rules>
@@ -74,7 +72,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>vha_agent.discovery[{$VHA_AGENT_LOCATIONS},backlogs]</key>
-                    <delay>3600</delay>
+                    <delay>{$VHA_AGENT_UPDATE_INTERVAL_DISCOVERY:backlogs}</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -84,7 +82,6 @@
                     <snmpv3_authpassphrase/>
                     <snmpv3_privprotocol>0</snmpv3_privprotocol>
                     <snmpv3_privpassphrase/>
-                    <delay_flex/>
                     <params/>
                     <ipmi_sensor/>
                     <authtype>0</authtype>
@@ -98,24 +95,22 @@
                         <formula/>
                         <conditions/>
                     </filter>
-                    <lifetime>60</lifetime>
+                    <lifetime>{$VHA_AGENT_KEEP_LOST_RESOURCES_PERIOD:backlogs}</lifetime>
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>VHA Agent[{#LOCATION}] - n_backlog_{#SUBJECT} (length of the waiting list of requests for a neighbor)</name>
+                            <name>VHA Agent [{#LOCATION}] - n_backlog_{#SUBJECT} (length of the waiting list of requests for a neighbor)</name>
                             <type>2</type>
                             <snmp_community/>
-                            <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_backlog_{#SUBJECT_ID}&quot;]</key>
                             <delay>0</delay>
-                            <history>30</history>
-                            <trends>365</trends>
+                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:n_backlog_backlogs}</history>
+                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:n_backlog_backlogs}</trends>
                             <status>0</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
-                            <delta>0</delta>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -123,11 +118,8 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -143,6 +135,10 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <application_prototypes/>
+                            <master_item_prototype/>
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes/>
@@ -181,6 +177,7 @@
                         </graph_prototype>
                     </graph_prototypes>
                     <host_prototypes/>
+                    <jmx_endpoint/>
                 </discovery_rule>
                 <discovery_rule>
                     <name>Items discovery</name>
@@ -188,7 +185,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>vha_agent.discovery[{$VHA_AGENT_LOCATIONS},items]</key>
-                    <delay>3600</delay>
+                    <delay>{$VHA_AGENT_UPDATE_INTERVAL_DISCOVERY:items}</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -198,7 +195,6 @@
                     <snmpv3_authpassphrase/>
                     <snmpv3_privprotocol>0</snmpv3_privprotocol>
                     <snmpv3_privpassphrase/>
-                    <delay_flex/>
                     <params/>
                     <ipmi_sensor/>
                     <authtype>0</authtype>
@@ -212,24 +208,22 @@
                         <formula/>
                         <conditions/>
                     </filter>
-                    <lifetime>30</lifetime>
+                    <lifetime>{$VHA_AGENT_KEEP_LOST_RESOURCES_PERIOD:items}</lifetime>
                     <description/>
                     <item_prototypes>
                         <item_prototype>
                             <name>VHA Agent[{#LOCATION}] - n_backlog (total length of all waiting lists of requests)</name>
                             <type>2</type>
                             <snmp_community/>
-                            <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_backlog&quot;]</key>
                             <delay>0</delay>
-                            <history>30</history>
-                            <trends>365</trends>
+                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:n_backlog_items}</history>
+                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:n_backlog_items}</trends>
                             <status>0</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
-                            <delta>0</delta>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -237,11 +231,8 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -257,22 +248,24 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <application_prototypes/>
+                            <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
                             <name>VHA Agent[{#LOCATION}] - n_dropped (requests dropped due to backlog limit / sec)</name>
                             <type>2</type>
                             <snmp_community/>
-                            <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;]</key>
                             <delay>0</delay>
-                            <history>30</history>
-                            <trends>365</trends>
+                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:n_dropped}</history>
+                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:n_dropped}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
                             <units>eps</units>
-                            <delta>1</delta>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -280,11 +273,8 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -300,22 +290,29 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <application_prototypes/>
+                            <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
                             <name>VHA Agent[{#LOCATION}] - n_insert (VSL transactions in which a new object was inserted / sec)</name>
                             <type>2</type>
                             <snmp_community/>
-                            <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_insert&quot;]</key>
                             <delay>0</delay>
-                            <history>30</history>
-                            <trends>365</trends>
+                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:n_insert}</history>
+                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:n_insert}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
                             <units>eps</units>
-                            <delta>1</delta>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -323,11 +320,8 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -343,22 +337,29 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <application_prototypes/>
+                            <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
                             <name>VHA Agent[{#LOCATION}] - n_req_failed (failed peer notifications / sec)</name>
                             <type>2</type>
                             <snmp_community/>
-                            <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;]</key>
                             <delay>0</delay>
-                            <history>30</history>
-                            <trends>365</trends>
+                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:n_req_failed}</history>
+                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:n_req_failed}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
                             <units>eps</units>
-                            <delta>1</delta>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -366,11 +367,8 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -386,22 +384,29 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <application_prototypes/>
+                            <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
                             <name>VHA Agent[{#LOCATION}] - n_req_total (peer notifications / sec)</name>
                             <type>2</type>
                             <snmp_community/>
-                            <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_total&quot;]</key>
                             <delay>0</delay>
-                            <history>30</history>
-                            <trends>365</trends>
+                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:n_req_total}</history>
+                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:n_req_total}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
                             <units>eps</units>
-                            <delta>1</delta>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -409,11 +414,8 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -429,22 +431,29 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <application_prototypes/>
+                            <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
                             <name>VHA Agent[{#LOCATION}] - n_trans (VSL transactions processed / sec)</name>
                             <type>2</type>
                             <snmp_community/>
-                            <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_trans&quot;]</key>
                             <delay>0</delay>
-                            <history>30</history>
-                            <trends>365</trends>
+                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:n_trans}</history>
+                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:n_trans}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
                             <units>eps</units>
-                            <delta>1</delta>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -452,11 +461,8 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -472,22 +478,29 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                </step>
+                            </preprocessing>
+                            <jmx_endpoint/>
+                            <application_prototypes/>
+                            <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
                             <name>VHA Agent[{#LOCATION}] - uptime</name>
                             <type>2</type>
                             <snmp_community/>
-                            <multiplier>0</multiplier>
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;]</key>
                             <delay>0</delay>
-                            <history>30</history>
-                            <trends>365</trends>
+                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:uptime}</history>
+                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:uptime}</trends>
                             <status>0</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units>uptime</units>
-                            <delta>0</delta>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -495,11 +508,8 @@
                             <snmpv3_authpassphrase/>
                             <snmpv3_privprotocol>0</snmpv3_privprotocol>
                             <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
                             <params/>
                             <ipmi_sensor/>
-                            <data_type>0</data_type>
                             <authtype>0</authtype>
                             <username/>
                             <password/>
@@ -515,35 +525,60 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <application_prototypes/>
+                            <master_item_prototype/>
                         </item_prototype>
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].last()}&lt;600</expression>
+                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].last()}&lt;{$VHA_AGENT_MIN_UPTIME_AFTER_RESTART}</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
                             <name>VHA Agent[{#LOCATION}] has been restarted</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
                             <url/>
                             <status>0</status>
                             <priority>4</priority>
                             <description/>
                             <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;].min(#10)}&gt;0.0</expression>
+                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;].min({$VHA_AGENT_LAST_VALUES_TO_CHECK:n_dropped})}&gt;{$VHA_AGENT_N_DROPPED_ALLOWED}</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
                             <name>VHA Agent[{#LOCATION}] is dropping requests</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
                             <url/>
                             <status>0</status>
                             <priority>2</priority>
                             <description/>
                             <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;].min(#10)}&gt;0.0</expression>
+                            <expression>{Template App VHA Agent Active:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;].min({$VHA_AGENT_LAST_VALUES_TO_CHECK:n_req_failed})}&gt;{$VHA_AGENT_N_REQ_FAILED_ALLOWED}</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
                             <name>VHA Agent[{#LOCATION}] is failing to notify peers</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
                             <url/>
                             <status>0</status>
                             <priority>2</priority>
                             <description/>
                             <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
                         </trigger_prototype>
                     </trigger_prototypes>
                     <graph_prototypes>
@@ -733,12 +768,54 @@
                         </graph_prototype>
                     </graph_prototypes>
                     <host_prototypes/>
+                    <jmx_endpoint/>
                 </discovery_rule>
             </discovery_rules>
+            <httptests/>
             <macros>
+                <macro>
+                    <macro>{$VHA_AGENT_HISTORY_STORAGE_PERIOD}</macro>
+                    <value>30d</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_INSTANCES}</macro>
+                    <value>1</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_KEEP_LOST_RESOURCES_PERIOD}</macro>
+                    <value>30d</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_LAST_VALUES_TO_CHECK}</macro>
+                    <value>#10</value>
+                </macro>
                 <macro>
                     <macro>{$VHA_AGENT_LOCATIONS}</macro>
                     <value/>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_MIN_UPTIME_AFTER_RESTART}</macro>
+                    <value>600</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_N_DROPPED_ALLOWED}</macro>
+                    <value>0.0</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_N_REQ_FAILED_ALLOWED}</macro>
+                    <value>0.0</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_TREND_STORAGE_PERIOD}</macro>
+                    <value>365d</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_UPDATE_INTERVAL_DISCOVERY}</macro>
+                    <value>3600</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT_UPDATE_INTERVAL_ITEM}</macro>
+                    <value>60</value>
                 </macro>
             </macros>
             <templates/>
@@ -747,14 +824,20 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template App VHA Agent Active:proc.num[vha-agent].last()}&lt;1</expression>
+            <expression>{Template App VHA Agent Active:proc.num[vha-agent].last()}&lt;{$VHA_AGENT_INSTANCES}</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
             <name>VHA Agent is not running</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
             <url/>
             <status>0</status>
             <priority>5</priority>
             <description/>
             <type>0</type>
+            <manual_close>0</manual_close>
             <dependencies/>
+            <tags/>
         </trigger>
     </triggers>
 </zabbix_export>
