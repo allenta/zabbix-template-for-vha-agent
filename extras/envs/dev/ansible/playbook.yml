@@ -5,8 +5,8 @@
   tasks:
     - import_tasks: global/tasks.yml
     - import_tasks: varnish/tasks.yml
-    - import_tasks: user/tasks.yml
     - import_tasks: zabbix/tasks.yml
+    - import_tasks: user/tasks.yml
   handlers:
     - name: Execute systemctl daemon-reload
       listen: reload-systemctl-daemon
