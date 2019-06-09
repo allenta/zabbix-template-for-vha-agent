@@ -99,7 +99,7 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>VHA Agent [{#LOCATION}] - n_backlog_{#SUBJECT} (length of the waiting list of requests for a neighbor)</name>
+                            <name>VHA Agent[{#LOCATION}] - n_backlog_{#SUBJECT} (length of the waiting list of requests for a neighbor)</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
