@@ -47,7 +47,7 @@ def send(options):
     # Build Zabbix sender input.
     for instance in options.vha_agent_instances.split(','):
         instance = instance.strip()
-        items = stats(instance)
+        items = stats(instance, options.default_vha_agent_status_file)
         for name, value in items.items():
             row = '- vha_agent.stat["%(instance)s","%(key)s"] %(tst)d %(value)s\n' % {
                 'instance': str2key(instance),
@@ -101,7 +101,7 @@ def discover(options):
                 '{#LOCATION_ID}': str2key(instance),
             })
         else:
-            items = stats(instance)
+            items = stats(instance, options.default_vha_agent_status_file)
             ids = set()
             for name in items.keys():
                 match = SUBJECTS[options.subject].match(name)
@@ -122,10 +122,10 @@ def discover(options):
 ## HELPERS
 ###############################################################################
 
-def stats(location):
+def stats(location, default_vha_agent_status_file):
     result = {}
     try:
-        with open(location or '/var/lib/vha-agent/vha-status', 'r') as file:
+        with open(location or default_vha_agent_status_file, 'r') as file:
             for line in file:
                 key, value = line.split('=', 1)
                 if ITEMS.match(key.strip()) is not None:
@@ -165,6 +165,10 @@ def main():
         '-i', '--vha-agent-instances', dest='vha_agent_instances',
         type=str, required=False, default='',
         help='comma-delimited list of VHA Agent status files to get stats from')
+    parser.add_argument(
+        '--default-vha-agent-status-file', dest='default_vha_agent_status_file',
+        type=str, required=False, default='/var/lib/vha-agent/vha-status',
+        help='default VHA Agent status file')
     subparsers = parser.add_subparsers(dest='command')
 
     # Set up 'send' command.

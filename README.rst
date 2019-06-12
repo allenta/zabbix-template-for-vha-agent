@@ -6,11 +6,11 @@
 
 3. Add the ``vha_agent.discovery`` user parameter to Zabbix::
 
-    UserParameter=vha_agent.discovery[*],sudo /usr/local/bin/zabbix-vha-agent.py -i '$1' discover $2
+    UserParameter=vha_agent.discovery[*],sudo /usr/local/bin/zabbix-vha-agent.py -i '$1' --default-vha-agent-status-file '/var/lib/vha-agent/vha-status' discover $2
 
 4. Add a new job to the ``zabbix`` user crontab (beware of the ``-i`` and ``-s`` options). This will submit VHA Agent metrics through Zabbix Sender::
 
-    * * * * * sudo /usr/local/bin/zabbix-vha-agent.py send -c /etc/zabbix/zabbix_agentd.conf -s dev > /dev/null 2>&1
+    * * * * * sudo /usr/local/bin/zabbix-vha-agent.py -i '' --default-vha-agent-status-file '/var/lib/vha-agent/vha-status' send -c /etc/zabbix/zabbix_agentd.conf -s dev > /dev/null 2>&1
 
 5. Import the VHA Agent template (``template-app-vha-agent.xml`` file).
 
