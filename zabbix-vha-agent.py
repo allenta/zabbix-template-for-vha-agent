@@ -47,11 +47,11 @@ def send(options):
     # Build Zabbix sender input.
     for instance in options.vha_agent_instances.split(','):
         instance = instance.strip()
-        items = stats(instance, options.default_vha_agent_status_file)
+        items = _stats(instance, options.default_vha_agent_status_file)
         for name, value in items.items():
             row = '- vha_agent.stat["%(instance)s","%(key)s"] %(tst)d %(value)s\n' % {
-                'instance': str2key(instance),
-                'key': str2key(name),
+                'instance': _str2key(instance),
+                'key': _str2key(name),
                 'tst': now,
                 'value': value,
             }
@@ -59,7 +59,7 @@ def send(options):
             rows += row
 
     # Submit metrics.
-    rc, output = execute('zabbix_sender -T -r -i - %(config)s %(server)s %(port)s %(host)s' % {
+    rc, output = _execute('zabbix_sender -T -r -i - %(config)s %(server)s %(port)s %(host)s' % {
         'config':
             '-c "%s"' % options.zabbix_config
             if options.zabbix_config is not None else '',
@@ -83,6 +83,28 @@ def send(options):
 
 
 ###############################################################################
+## 'stats' COMMAND
+###############################################################################
+
+def stats(options):
+    # Initializations.
+    result = {}
+
+    # Build master item contents.
+    for instance in options.vha_agent_instances.split(','):
+        instance = instance.strip()
+        items = _stats(instance, options.default_vha_agent_status_file)
+        for name, value in items.items():
+            result['%(instance)s.%(name)s' % {
+                'instance': _str2key(instance),
+                'name': _str2key(name),
+            }] = value
+
+    # Render output.
+    sys.stdout.write(json.dumps(result, separators=(',', ':')))
+
+
+###############################################################################
 ## 'discover' COMMAND
 ###############################################################################
 
@@ -98,19 +120,19 @@ def discover(options):
         if options.subject == 'items':
             discovery['data'].append({
                 '{#LOCATION}': instance,
-                '{#LOCATION_ID}': str2key(instance),
+                '{#LOCATION_ID}': _str2key(instance),
             })
         else:
-            items = stats(instance, options.default_vha_agent_status_file)
+            items = _stats(instance, options.default_vha_agent_status_file)
             ids = set()
             for name in items.keys():
                 match = SUBJECTS[options.subject].match(name)
                 if match is not None and match.group(1) not in ids:
                     discovery['data'].append({
                         '{#LOCATION}': instance,
-                        '{#LOCATION_ID}': str2key(instance),
+                        '{#LOCATION_ID}': _str2key(instance),
                         '{#SUBJECT}': match.group(1),
-                        '{#SUBJECT_ID}': str2key(match.group(1)),
+                        '{#SUBJECT_ID}': _str2key(match.group(1)),
                     })
                     ids.add(match.group(1))
 
@@ -122,7 +144,7 @@ def discover(options):
 ## HELPERS
 ###############################################################################
 
-def stats(location, default_vha_agent_status_file):
+def _stats(location, default_vha_agent_status_file):
     result = {}
     try:
         with open(location or default_vha_agent_status_file, 'r') as file:
@@ -135,14 +157,14 @@ def stats(location, default_vha_agent_status_file):
     return result
 
 
-def str2key(name):
+def _str2key(name):
     result = name
     for char in ['(', ')', ',']:
         result = result.replace(char, '\\' + char)
     return result
 
 
-def execute(command, stdin=None):
+def _execute(command, stdin=None):
     child = subprocess.Popen(
         command,
         shell=True,
@@ -193,6 +215,11 @@ def main():
         '-s', '--zabbix-host', dest='zabbix_host',
         type=str, required=False, default=None,
         help='host name as registered in the Zabbix frontend')
+
+    # Set up 'stats' command.
+    subparser = subparsers.add_parser(
+        'stats',
+        help='collect VHA Agent stats')
 
     # Set up 'discover' command.
     subparser = subparsers.add_parser(
