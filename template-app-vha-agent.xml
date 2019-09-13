@@ -822,7 +822,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].last()}&lt;{$VHA_AGENT.UPTIME.MIN}</expression>
+                            <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:uptime})}&lt;{$VHA_AGENT.UPTIME.MIN}</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>VHA Agent[{#LOCATION}] has been restarted</name>
@@ -1097,6 +1097,14 @@
                 </macro>
                 <macro>
                     <macro>{$VHA_AGENT.LAST_VALUES_TO_CHECK}</macro>
+                    <value>#1</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.LAST_VALUES_TO_CHECK:n_dropped}</macro>
+                    <value>#10</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.LAST_VALUES_TO_CHECK:n_req_failed}</macro>
                     <value>#10</value>
                 </macro>
                 <macro>
@@ -1134,7 +1142,7 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template App VHA Agent:proc.num[vha-agent].last()}&lt;{$VHA_AGENT.PROCESSES.MIN}</expression>
+            <expression>{Template App VHA Agent:proc.num[vha-agent].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:proc.num-vha-agent})}&lt;{$VHA_AGENT.PROCESSES.MIN}</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>VHA Agent is not running</name>
