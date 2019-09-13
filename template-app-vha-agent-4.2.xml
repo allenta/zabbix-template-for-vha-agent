@@ -29,8 +29,8 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
-                    <delay>{$VHA_AGENT_UPDATE_INTERVAL_ITEM:stats}</delay>
-                    <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:stats}</history>
+                    <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL:stats}</delay>
+                    <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:stats}</history>
                     <trends>0</trends>
                     <status>0</status>
                     <value_type>4</value_type>
@@ -88,9 +88,9 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>proc.num[vha-agent]</key>
-                    <delay>{$VHA_AGENT_UPDATE_INTERVAL_ITEM:proc.num_vha-agent}</delay>
-                    <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:proc.num_vha-agent}</history>
-                    <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:proc.num_vha-agent}</trends>
+                    <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL:proc.num_vha-agent}</delay>
+                    <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:proc.num_vha-agent}</history>
+                    <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:proc.num_vha-agent}</trends>
                     <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
@@ -149,7 +149,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>vha_agent.discovery[&quot;{$VHA_AGENT_LOCATIONS}&quot;,&quot;backlogs&quot;]</key>
-                    <delay>{$VHA_AGENT_UPDATE_INTERVAL_DISCOVERY:backlogs}</delay>
+                    <delay>{$VHA_AGENT.LLD_UPDATE_INTERVAL:backlogs}</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -172,7 +172,7 @@
                         <formula/>
                         <conditions/>
                     </filter>
-                    <lifetime>{$VHA_AGENT_KEEP_LOST_RESOURCES_PERIOD:backlogs}</lifetime>
+                    <lifetime>{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD:backlogs}</lifetime>
                     <description/>
                     <item_prototypes>
                         <item_prototype>
@@ -182,8 +182,8 @@
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_backlog_{#SUBJECT_ID}&quot;]</key>
                             <delay>0</delay>
-                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:backlogs:n_backlog}</history>
-                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:backlogs:n_backlog}</trends>
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:backlogs:n_backlog}</history>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:backlogs:n_backlog}</trends>
                             <status>0</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
@@ -309,7 +309,7 @@
                     <snmp_community/>
                     <snmp_oid/>
                     <key>vha_agent.discovery[&quot;{$VHA_AGENT_LOCATIONS}&quot;,&quot;items&quot;]</key>
-                    <delay>{$VHA_AGENT_UPDATE_INTERVAL_DISCOVERY:items}</delay>
+                    <delay>{$VHA_AGENT.LLD_UPDATE_INTERVAL:items}</delay>
                     <status>0</status>
                     <allowed_hosts/>
                     <snmpv3_contextname/>
@@ -332,7 +332,7 @@
                         <formula/>
                         <conditions/>
                     </filter>
-                    <lifetime>{$VHA_AGENT_KEEP_LOST_RESOURCES_PERIOD:items}</lifetime>
+                    <lifetime>{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD:items}</lifetime>
                     <description/>
                     <item_prototypes>
                         <item_prototype>
@@ -342,8 +342,8 @@
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_backlog&quot;]</key>
                             <delay>0</delay>
-                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:items:n_backlog}</history>
-                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:items:n_backlog}</trends>
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:items:n_backlog}</history>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:items:n_backlog}</trends>
                             <status>0</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
@@ -411,8 +411,8 @@
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;]</key>
                             <delay>0</delay>
-                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:items:n_dropped}</history>
-                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:items:n_dropped}</trends>
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:items:n_dropped}</history>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:items:n_dropped}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
@@ -486,8 +486,8 @@
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_insert&quot;]</key>
                             <delay>0</delay>
-                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:items:n_insert}</history>
-                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:items:n_insert}</trends>
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:items:n_insert}</history>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:items:n_insert}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
@@ -561,8 +561,8 @@
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;]</key>
                             <delay>0</delay>
-                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:items:n_req_failed}</history>
-                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:items:n_req_failed}</trends>
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:items:n_req_failed}</history>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:items:n_req_failed}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
@@ -636,8 +636,8 @@
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_total&quot;]</key>
                             <delay>0</delay>
-                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:items:n_req_total}</history>
-                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:items:n_req_total}</trends>
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:items:n_req_total}</history>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:items:n_req_total}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
@@ -711,8 +711,8 @@
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_trans&quot;]</key>
                             <delay>0</delay>
-                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:items:n_trans}</history>
-                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:items:n_trans}</trends>
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:items:n_trans}</history>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:items:n_trans}</trends>
                             <status>0</status>
                             <value_type>0</value_type>
                             <allowed_hosts/>
@@ -786,8 +786,8 @@
                             <snmp_oid/>
                             <key>vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;]</key>
                             <delay>0</delay>
-                            <history>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:items:uptime}</history>
-                            <trends>{$VHA_AGENT_TREND_STORAGE_PERIOD:items:uptime}</trends>
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:items:uptime}</history>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:items:uptime}</trends>
                             <status>0</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
@@ -851,7 +851,7 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].last()}&lt;{$VHA_AGENT_MIN_UPTIME_AFTER_RESTART}</expression>
+                            <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;uptime&quot;].last()}&lt;{$VHA_AGENT.UPTIME.MIN}</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>VHA Agent[{#LOCATION}] has been restarted</name>
@@ -867,7 +867,7 @@
                             <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;].min({$VHA_AGENT_LAST_VALUES_TO_CHECK:n_dropped})}&gt;{$VHA_AGENT_N_DROPPED_ALLOWED}</expression>
+                            <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_dropped&quot;].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_dropped})}&gt;{$VHA_AGENT.N_DROPPED.MAX}</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>VHA Agent[{#LOCATION}] is dropping requests</name>
@@ -883,7 +883,7 @@
                             <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;].min({$VHA_AGENT_LAST_VALUES_TO_CHECK:n_req_failed})}&gt;{$VHA_AGENT_N_REQ_FAILED_ALLOWED}</expression>
+                            <expression>{Template App VHA Agent:vha_agent.stat[&quot;{#LOCATION_ID}&quot;,&quot;n_req_failed&quot;].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_req_failed})}&gt;{$VHA_AGENT.N_REQ_FAILED.MAX}</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
                             <name>VHA Agent[{#LOCATION}] is failing to notify peers</name>
@@ -1112,52 +1112,52 @@
             <httptests/>
             <macros>
                 <macro>
-                    <macro>{$VHA_AGENT_HISTORY_STORAGE_PERIOD}</macro>
-                    <value>30d</value>
-                </macro>
-                <macro>
-                    <macro>{$VHA_AGENT_HISTORY_STORAGE_PERIOD:stats}</macro>
+                    <macro>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:stats}</macro>
                     <value>0</value>
                 </macro>
                 <macro>
-                    <macro>{$VHA_AGENT_INSTANCES}</macro>
-                    <value>1</value>
-                </macro>
-                <macro>
-                    <macro>{$VHA_AGENT_KEEP_LOST_RESOURCES_PERIOD}</macro>
+                    <macro>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD}</macro>
                     <value>30d</value>
                 </macro>
                 <macro>
-                    <macro>{$VHA_AGENT_LAST_VALUES_TO_CHECK}</macro>
-                    <value>#10</value>
-                </macro>
-                <macro>
-                    <macro>{$VHA_AGENT_LOCATIONS}</macro>
-                    <value/>
-                </macro>
-                <macro>
-                    <macro>{$VHA_AGENT_MIN_UPTIME_AFTER_RESTART}</macro>
-                    <value>600</value>
-                </macro>
-                <macro>
-                    <macro>{$VHA_AGENT_N_DROPPED_ALLOWED}</macro>
-                    <value>0.0</value>
-                </macro>
-                <macro>
-                    <macro>{$VHA_AGENT_N_REQ_FAILED_ALLOWED}</macro>
-                    <value>0.0</value>
-                </macro>
-                <macro>
-                    <macro>{$VHA_AGENT_TREND_STORAGE_PERIOD}</macro>
+                    <macro>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD}</macro>
                     <value>365d</value>
                 </macro>
                 <macro>
-                    <macro>{$VHA_AGENT_UPDATE_INTERVAL_DISCOVERY}</macro>
-                    <value>3600</value>
+                    <macro>{$VHA_AGENT.ITEM_UPDATE_INTERVAL}</macro>
+                    <value>60s</value>
                 </macro>
                 <macro>
-                    <macro>{$VHA_AGENT_UPDATE_INTERVAL_ITEM}</macro>
-                    <value>60</value>
+                    <macro>{$VHA_AGENT.LAST_VALUES_TO_CHECK}</macro>
+                    <value>#10</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD}</macro>
+                    <value>30d</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.LLD_UPDATE_INTERVAL}</macro>
+                    <value>1h</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.LOCATIONS}</macro>
+                    <value/>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.N_DROPPED.MAX}</macro>
+                    <value>0.0</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.N_REQ_FAILED.MAX}</macro>
+                    <value>0.0</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.PROCESSES.MIN}</macro>
+                    <value>1</value>
+                </macro>
+                <macro>
+                    <macro>{$VHA_AGENT.UPTIME.MIN}</macro>
+                    <value>10m</value>
                 </macro>
             </macros>
             <templates/>
@@ -1167,7 +1167,7 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template App VHA Agent:proc.num[vha-agent].last()}&lt;{$VHA_AGENT_INSTANCES}</expression>
+            <expression>{Template App VHA Agent:proc.num[vha-agent].last()}&lt;{$VHA_AGENT.PROCESSES.MIN}</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>VHA Agent is not running</name>

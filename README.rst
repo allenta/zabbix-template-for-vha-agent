@@ -11,22 +11,23 @@
 
 4. Import the VHA Agent template (``template-app-vha-agent.xml`` file).
 
-5. Add an existing / new host to the ``Varnish Cache servers`` group and link it to the ``Template App VHA Agent`` template. Beware you must set a value for the ``{$VHA_AGENT_LOCATIONS}`` macro (comma-delimited list of VHA Agent status files). Usually you should leave its value blank when running a single VHA Agent instance per server. The following macros are available on both templates:
+5. Add an existing / new host to the ``Varnish Cache servers`` group and link it to the ``Template App VHA Agent`` template. Beware you must set a value for the ``{$VHA_AGENT.LOCATIONS}`` macro (comma-delimited list of VHA Agent status files). Usually you should leave its value blank when running a single VHA Agent instance per server. The following macros are available on both templates:
 
-   * ``{$VHA_AGENT_HISTORY_STORAGE_PERIOD}``
-   * ``{$VHA_AGENT_INSTANCES}``
-   * ``{$VHA_AGENT_KEEP_LOST_RESOURCES_PERIOD}``
-   * ``{$VHA_AGENT_LAST_VALUES_TO_CHECK}``
-   * ``{$VHA_AGENT_MIN_UPTIME_AFTER_RESTART}``
-   * ``{$VHA_AGENT_N_DROPPED_ALLOWED}``
-   * ``{$VHA_AGENT_N_REQ_FAILED_ALLOWED}``
-   * ``{$VHA_AGENT_TREND_STORAGE_PERIOD}``
-   * ``{$VHA_AGENT_UPDATE_INTERVAL_DISCOVERY}``
-   * ``{$VHA_AGENT_UPDATE_INTERVAL_ITEM}``
+   * ``{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD}``
+   * ``{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD}``
+   * ``{$VHA_AGENT.ITEM_UPDATE_INTERVAL}``
+   * ``{$VHA_AGENT.LAST_VALUES_TO_CHECK}``
+   * ``{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD}``
+   * ``{$VHA_AGENT.LLD_UPDATE_INTERVAL}``
+   * ``{$VHA_AGENT.LOCATIONS}``
+   * ``{$VHA_AGENT.N_DROPPED.MAX}``
+   * ``{$VHA_AGENT.N_REQ_FAILED.MAX}``
+   * ``{$VHA_AGENT.PROCESSES.MIN}``
+   * ``{$VHA_AGENT.UPTIME.MIN}``
 
    It's also possible to use **contexts** on macros, for example:
 
-   * ``{$VHA_AGENT_UPDATE_INTERVAL_DISCOVERY:backlogs}``
-   * ``{$VHA_AGENT_HISTORY_STORAGE_PERIOD:items:n_req_total}``
+   * ``{$VHA_AGENT.LLD_UPDATE_INTERVAL:backlogs}``
+   * ``{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:items:n_req_total}``
 
 6. Enable triggers and trigger prototypes according with your preferences.
