@@ -1170,7 +1170,12 @@
             </macros>
             <templates/>
             <screens/>
-            <tags/>
+            <tags>
+                <tag>
+                    <tag>App</tag>
+                    <value>VHA Agent</value>
+                </tag>
+            </tags>
         </template>
     </templates>
     <triggers>
