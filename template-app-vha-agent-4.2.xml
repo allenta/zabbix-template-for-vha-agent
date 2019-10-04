@@ -28,7 +28,7 @@
                     <type>7</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                    <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                     <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL:stats}</delay>
                     <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:stats}</history>
                     <trends>0</trends>
@@ -148,7 +148,7 @@
                     <type>7</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>vha_agent.discovery[&quot;{$VHA_AGENT_LOCATIONS}&quot;,&quot;backlogs&quot;]</key>
+                    <key>vha_agent.discovery[&quot;{$VHA_AGENT.LOCATIONS}&quot;,&quot;backlogs&quot;]</key>
                     <delay>{$VHA_AGENT.LLD_UPDATE_INTERVAL:backlogs}</delay>
                     <status>0</status>
                     <allowed_hosts/>
@@ -241,7 +241,7 @@
                             <verify_host>0</verify_host>
                             <application_prototypes/>
                             <master_item>
-                                <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                                <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                             </master_item>
                         </item_prototype>
                     </item_prototypes>
@@ -308,7 +308,7 @@
                     <type>7</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>vha_agent.discovery[&quot;{$VHA_AGENT_LOCATIONS}&quot;,&quot;items&quot;]</key>
+                    <key>vha_agent.discovery[&quot;{$VHA_AGENT.LOCATIONS}&quot;,&quot;items&quot;]</key>
                     <delay>{$VHA_AGENT.LLD_UPDATE_INTERVAL:items}</delay>
                     <status>0</status>
                     <allowed_hosts/>
@@ -401,7 +401,7 @@
                             <verify_host>0</verify_host>
                             <application_prototypes/>
                             <master_item>
-                                <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                                <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -476,7 +476,7 @@
                             <verify_host>0</verify_host>
                             <application_prototypes/>
                             <master_item>
-                                <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                                <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -551,7 +551,7 @@
                             <verify_host>0</verify_host>
                             <application_prototypes/>
                             <master_item>
-                                <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                                <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -626,7 +626,7 @@
                             <verify_host>0</verify_host>
                             <application_prototypes/>
                             <master_item>
-                                <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                                <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -701,7 +701,7 @@
                             <verify_host>0</verify_host>
                             <application_prototypes/>
                             <master_item>
-                                <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                                <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -776,7 +776,7 @@
                             <verify_host>0</verify_host>
                             <application_prototypes/>
                             <master_item>
-                                <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                                <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                             </master_item>
                         </item_prototype>
                         <item_prototype>
@@ -845,7 +845,7 @@
                             <verify_host>0</verify_host>
                             <application_prototypes/>
                             <master_item>
-                                <key>vha_agent.stats[&quot;{$VHA_AGENT_LOCATIONS}&quot;]</key>
+                                <key>vha_agent.stats[&quot;{$VHA_AGENT.LOCATIONS}&quot;]</key>
                             </master_item>
                         </item_prototype>
                     </item_prototypes>
