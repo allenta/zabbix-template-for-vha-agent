@@ -12,6 +12,9 @@
 4. Generate the VHA Agent template template using the Jinja2 skeleton and import it::
 
     $ pip install jinja2-cli
-    $ jinja2 --strict -D version='{4.0,4.2}' -o template.xml template-app-vha-agent.j2
+    $ jinja2 \
+        -D version={4.0,4.2} \
+        [-D name='VHA Agent'] \
+        --strict -o template.xml template-app-vha-agent.j2
 
 5. Add an existing / new host to the ``Varnish Cache servers`` group and link it to the ``Template App VHA Agent`` template. Beware you must set a value for the ``{$VHA_AGENT.LOCATIONS}`` macro (comma-delimited list of VHA Agent status files). Usually you should leave its value blank when running a single VHA Agent instance per server. Additional macros and contexts are available for further customizations.

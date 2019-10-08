@@ -2,6 +2,10 @@
 {#- HELPERS -#}
 {#-#########################################################################-#}
 
+{%- set name = name|default('VHA Agent') -%}
+
+{%- set master = 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]' -%}
+
 {%- macro discovery_rule(rule, items, triggers, graphs) -%}
     <discovery_rule>
         <name>{{ rule.name|e }}</name>
@@ -200,7 +204,7 @@
                                 <calc_fnc>{{ gitem.calc_fnc|default(2) }}</calc_fnc>
                                 <type>0</type>
                                 <item>
-                                    <host>Template App VHA Agent</host>
+                                    <host>Template App {{ name }}</host>
                                     <key>{{ gitem.key|e }}</key>
                                 </item>
                             </graph_item>
@@ -227,8 +231,8 @@
     </groups>
     <templates>
         <template>
-            <template>Template App VHA Agent</template>
-            <name>Template App VHA Agent</name>
+            <template>Template App {{ name }}</template>
+            <name>Template App {{ name }}</name>
             <description/>
             <groups>
                 <group>
@@ -260,7 +264,7 @@
                 {% for item in [
                         {
                             'name': 'stats',
-                            'key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'key': master,
                             'context': 'stats',
                             'trends': false,
                             'value_type': 4,
@@ -360,7 +364,7 @@
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_backlog"]',
                             'context': 'items:n_backlog',
                             'value_type': 3,
-                            'master_item_key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'master_item_key': master,
                             'preprocessing': [
                                 {
                                     'type': 12,
@@ -376,7 +380,7 @@
                             'context': 'items:n_dropped',
                             'value_type': 0,
                             'units': 'eps',
-                            'master_item_key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'master_item_key': master,
                             'preprocessing': [
                                 {
                                     'type': 12,
@@ -395,7 +399,7 @@
                             'context': 'items:n_insert',
                             'value_type': 0,
                             'units': 'eps',
-                            'master_item_key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'master_item_key': master,
                             'preprocessing': [
                                 {
                                     'type': 12,
@@ -414,7 +418,7 @@
                             'context': 'items:n_req_failed',
                             'value_type': 0,
                             'units': 'eps',
-                            'master_item_key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'master_item_key': master,
                             'preprocessing': [
                                 {
                                     'type': 12,
@@ -433,7 +437,7 @@
                             'context': 'items:n_req_total',
                             'value_type': 0,
                             'units': 'eps',
-                            'master_item_key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'master_item_key': master,
                             'preprocessing': [
                                 {
                                     'type': 12,
@@ -452,7 +456,7 @@
                             'context': 'items:n_trans',
                             'value_type': 0,
                             'units': 'eps',
-                            'master_item_key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'master_item_key': master,
                             'preprocessing': [
                                 {
                                     'type': 12,
@@ -471,7 +475,7 @@
                             'context': 'items:uptime',
                             'value_type': 3,
                             'units': 'uptime',
-                            'master_item_key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'master_item_key': master,
                             'preprocessing': [
                                 {
                                     'type': 12,
@@ -486,21 +490,21 @@
                         {
                             'name': 'has been restarted',
                             'expression':
-                                '{Template App VHA Agent:vha_agent.stat["{#LOCATION_ID}","uptime"].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:uptime})}'
+                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","uptime"].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:uptime})}'
                                 '<{$VHA_AGENT.UPTIME.MIN}',
                             'priority': 4,
                         },
                         {
                             'name': 'is dropping requests',
                             'expression':
-                                '{Template App VHA Agent:vha_agent.stat["{#LOCATION_ID}","n_dropped"].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_dropped})}'
+                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_dropped"].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_dropped})}'
                                 '>{$VHA_AGENT.N_DROPPED.MAX}',
                             'priority': 2,
                         },
                         {
                             'name': 'is failing to notify peers',
                             'expression':
-                                '{Template App VHA Agent:vha_agent.stat["{#LOCATION_ID}","n_req_failed"].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_req_failed})}'
+                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_req_failed"].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_req_failed})}'
                                 '>{$VHA_AGENT.N_REQ_FAILED.MAX}',
                             'priority': 2,
                         },
@@ -578,7 +582,7 @@
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_backlog_{#SUBJECT_ID}"]',
                             'context': 'backlogs:n_backlog',
                             'value_type': 3,
-                            'master_item_key': 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]',
+                            'master_item_key': master,
                             'preprocessing': [
                                 {
                                     'type': 12,
@@ -642,7 +646,7 @@
                 {
                     'name': 'VHA Agent is not running',
                     'expression':
-                        '{Template App VHA Agent:proc.num[vha-agent].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:proc.num-vha-agent})}'
+                        '{Template App ' + name + ':proc.num[vha-agent].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:proc.num-vha-agent})}'
                         '<{$VHA_AGENT.PROCESSES.MIN}',
                 },
             ] %}
