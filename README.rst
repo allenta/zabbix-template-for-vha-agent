@@ -1,4 +1,4 @@
-**This is a Zabbix template + discovery & sender script useful to monitor Varnish High Availability (VHA) Agent instances:**
+**This is a Zabbix template + script useful to monitor Varnish High Availability (VHA) Agent instances:**
 
 1. Copy ``zabbix-vha-agent.py`` to ``/usr/local/bin/``.
 
