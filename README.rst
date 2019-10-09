@@ -17,4 +17,4 @@
         [-D name='VHA Agent'] \
         --strict -o template.xml template-app-vha-agent.j2
 
-5. Add an existing / new host to the ``Varnish Cache servers`` group and link it to the ``Template App VHA Agent`` template. Beware you must set a value for the ``{$VHA_AGENT.LOCATIONS}`` macro (comma-delimited list of VHA Agent status files). Usually you should leave its value blank when running a single VHA Agent instance per server. Additional macros and contexts are available for further customizations.
+5. Link hosts to the template. Beware you must set a value for the ``{$VHA_AGENT.LOCATIONS}`` macro (comma-delimited list of VHA Agent status files). Usually you should leave its value blank when running a single VHA Agent instance per server. Additional macros and contexts are available for further customizations.
