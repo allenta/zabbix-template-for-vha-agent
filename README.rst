@@ -13,7 +13,7 @@
 
     $ pip install jinja2-cli
     $ jinja2 \
-        -D version={4.0,4.2} \
+        -D version={4.0,4.2,4.4} \
         [-D name='VHA Agent'] \
         --strict -o template.xml template-app-vha-agent.j2
 

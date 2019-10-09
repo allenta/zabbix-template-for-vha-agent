@@ -1,62 +1,203 @@
-{#-#########################################################################-#}
-{#- HELPERS -#}
-{#-#########################################################################-#}
-
 {%- set name = name|default('VHA Agent') -%}
 
 {%- set master = 'vha_agent.stats["{$VHA_AGENT.LOCATIONS}"]' -%}
 
+{#-#########################################################################-#}
+{#- MACROS -#}
+{#-#########################################################################-#}
+
+{%- macro item_type(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'TRAP' -%}
+            2
+        {%- elif name == 'ZABBIX_ACTIVE' -%}
+            7
+        {%- elif name == 'CALCULATED' -%}
+            15
+        {%- elif name == 'DEPENDENT' -%}
+            18
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro item_value_type(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'FLOAT' -%}
+            0
+        {%- elif name == 'UNSIGNED' -%}
+            3
+        {%- elif name == 'TEXT' -%}
+            4
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro trigger_priority(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'WARNING' -%}
+            2
+        {%- elif name == 'HIGH' -%}
+            4
+        {%- elif name == 'DISASTER' -%}
+            5
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro preprocessing_type(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'BOOL_TO_DECIMAL' -%}
+            6
+        {%- elif name == 'CHANGE_PER_SECOND' -%}
+            10
+        {%- elif name == 'JSONPATH' -%}
+            12
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro preprocessing_error_handler(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'ORIGINAL_ERROR' -%}
+            0
+        {%- elif name == 'DISCARD_VALUE' -%}
+            1
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro graph_type(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'NORMAL' -%}
+            0
+        {%- elif name == 'STACKED' -%}
+            1
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro graph_item_drawtype(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'SINGLE_LINE' -%}
+            0
+        {%- elif name == 'FILLED_REGION' -%}
+            1
+        {%- elif name == 'BOLD_LINE' -%}
+            2
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro graph_item_yaxisside(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'LEFT' -%}
+            0
+        {%- elif name == 'RIGHT' -%}
+            1
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro graph_item_calc_fnc(name) -%}
+    {%- if version == '4.4' -%}
+        {{ name }}
+    {%- else -%}
+        {%- if name == 'MIN' -%}
+            1
+        {%- elif name == 'AVG' -%}
+            2
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro trigger(definition) -%}
+    <expression>{{ definition.expression|e }}</expression>
+    <name>{{ definition.name|e }}</name>
+    <priority>{{ trigger_priority(definition.priority) }}</priority>
+    {% if version in ('4.0', '4.2') %}
+        <recovery_mode>0</recovery_mode>
+        <recovery_expression/>
+        <correlation_mode>0</correlation_mode>
+        <correlation_tag/>
+        <url/>
+        <status>0</status>
+        <description/>
+        <type>0</type>
+        <manual_close>0</manual_close>
+        <dependencies/>
+        <tags/>
+    {% endif %}
+{%- endmacro -%}
+
 {%- macro discovery_rule(rule, items, triggers, graphs) -%}
     <discovery_rule>
         <name>{{ rule.name|e }}</name>
-        <type>7</type>
-        <snmp_community/>
-        <snmp_oid/>
+        <type>{{ item_type('ZABBIX_ACTIVE') }}</type>
         <key>{{ rule.key|e }}</key>
         <delay>{$VHA_AGENT.LLD_UPDATE_INTERVAL:{{ rule.context }}}</delay>
-        <status>0</status>
-        <allowed_hosts/>
-        <snmpv3_contextname/>
-        <snmpv3_securityname/>
-        <snmpv3_securitylevel>0</snmpv3_securitylevel>
-        <snmpv3_authprotocol>0</snmpv3_authprotocol>
-        <snmpv3_authpassphrase/>
-        <snmpv3_privprotocol>0</snmpv3_privprotocol>
-        <snmpv3_privpassphrase/>
-        <params/>
-        <ipmi_sensor/>
-        <authtype>0</authtype>
-        <username/>
-        <password/>
-        <publickey/>
-        <privatekey/>
-        <port/>
-        <filter>
-            <evaltype>0</evaltype>
-            <formula/>
-            <conditions/>
-        </filter>
         <lifetime>{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD:{{ rule.context }}}</lifetime>
-        <description/>
-        <host_prototypes/>
-        <jmx_endpoint/>
-        <timeout>3s</timeout>
-        <url/>
-        <query_fields/>
-        <posts/>
-        <status_codes>200</status_codes>
-        <follow_redirects>1</follow_redirects>
-        <post_type>0</post_type>
-        <http_proxy/>
-        <headers/>
-        <retrieve_mode>0</retrieve_mode>
-        <request_method>0</request_method>
-        <allow_traps>0</allow_traps>
-        <ssl_cert_file/>
-        <ssl_key_file/>
-        <ssl_key_password/>
-        <verify_peer>0</verify_peer>
-        <verify_host>0</verify_host>
+        {% if version in ('4.0', '4.2') %}
+            <snmp_community/>
+            <snmp_oid/>
+            <status>0</status>
+            <allowed_hosts/>
+            <snmpv3_contextname/>
+            <snmpv3_securityname/>
+            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+            <snmpv3_authpassphrase/>
+            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+            <snmpv3_privpassphrase/>
+            <params/>
+            <ipmi_sensor/>
+            <authtype>0</authtype>
+            <username/>
+            <password/>
+            <publickey/>
+            <privatekey/>
+            <port/>
+            <filter>
+                <evaltype>0</evaltype>
+                <formula/>
+                <conditions/>
+            </filter>
+            <description/>
+            <host_prototypes/>
+            <jmx_endpoint/>
+            <timeout>3s</timeout>
+            <url/>
+            <query_fields/>
+            <posts/>
+            <status_codes>200</status_codes>
+            <follow_redirects>1</follow_redirects>
+            <post_type>0</post_type>
+            <http_proxy/>
+            <headers/>
+            <retrieve_mode>0</retrieve_mode>
+            <request_method>0</request_method>
+            <allow_traps>0</allow_traps>
+            <ssl_cert_file/>
+            <ssl_key_file/>
+            <ssl_key_password/>
+            <verify_peer>0</verify_peer>
+            <verify_host>0</verify_host>
+        {% endif %}
         {% if version == '4.2' %}
             <lld_macro_paths/>
             <preprocessing/>
@@ -66,9 +207,7 @@
             {% for item in items %}
                 <item_prototype>
                     <name>VHA Agent[{{ '{#' }}LOCATION}] - {{ item.name|e }}</name>
-                    <type>{{ item.type }}</type>
-                    <snmp_community/>
-                    <snmp_oid/>
+                    <type>{{ item_type(item.type) }}</type>
                     <key>{{ item.key|e }}</key>
                     {% if 'delay' in item and item.delay %}
                         <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL:{{ item.context }}}</delay>
@@ -81,218 +220,42 @@
                     {% else %}
                         <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:{{ item.context }}}</trends>
                     {% endif %}
-                    <status>0</status>
-                    <value_type>{{ item.value_type }}</value_type>
-                    <allowed_hosts/>
+                    <value_type>{{ item_value_type(item.value_type) }}</value_type>
                     <units>{{ item.units|default('')|e }}</units>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
                     <params>{{ item.params|default('')|e }}</params>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
                     <applications>
                         <application>
                             <name>VHA Agent</name>
                         </application>
                     </applications>
-                    <valuemap/>
-                    <logtimefmt/>
                     {% if 'master_item_key' in item %}
                         <master_item>
                             <key>{{ item.master_item_key|e }}</key>
                         </master_item>
-                    {% else %}
+                    {% elif version in ('4.0', '4.2') %}
                         <master_item/>
                     {% endif %}
                     {% if 'preprocessing' in item %}
                         <preprocessing>
                             {% for step in item.preprocessing %}
                                 <step>
-                                    <type>{{ step.type }}</type>
+                                    <type>{{ preprocessing_type(step.type) }}</type>
                                     <params>{{ step.params|default('')|e }}</params>
-                                    {% if version == '4.2' %}
-                                        <error_handler>{{ step.error_handler|default(0) }}</error_handler>
+                                    {% if version in ('4.2', '4.4') %}
+                                        <error_handler>{{ preprocessing_error_handler(step.error_handler|default('ORIGINAL_ERROR')) }}</error_handler>
                                         <error_handler_params/>
                                     {% endif %}
                                 </step>
                             {% endfor %}
                         </preprocessing>
-                    {% else %}
+                    {% elif version in ('4.0', '4.2') %}
                         <preprocessing/>
                     {% endif %}
-                    <jmx_endpoint/>
-                    <timeout>3s</timeout>
-                    <url/>
-                    <query_fields/>
-                    <posts/>
-                    <status_codes>200</status_codes>
-                    <follow_redirects>1</follow_redirects>
-                    <post_type>0</post_type>
-                    <http_proxy/>
-                    <headers/>
-                    <retrieve_mode>0</retrieve_mode>
-                    <request_method>0</request_method>
-                    <output_format>0</output_format>
-                    <allow_traps>0</allow_traps>
-                    <ssl_cert_file/>
-                    <ssl_key_file/>
-                    <ssl_key_password/>
-                    <verify_peer>0</verify_peer>
-                    <verify_host>0</verify_host>
-                    <application_prototypes/>
-                </item_prototype>
-            {% endfor %}
-        </item_prototypes>
-        <trigger_prototypes>
-            {% for trigger in triggers %}
-                <trigger_prototype>
-                    <expression>{{ trigger.expression|e }}</expression>
-                    <recovery_mode>0</recovery_mode>
-                    <recovery_expression/>
-                    <name>VHA Agent[{{ '{#' }}LOCATION}] {{ trigger.name|e }}</name>
-                    <correlation_mode>0</correlation_mode>
-                    <correlation_tag/>
-                    <url/>
-                    <status>0</status>
-                    <priority>{{ trigger.priority }}</priority>
-                    <description/>
-                    <type>0</type>
-                    <manual_close>0</manual_close>
-                    <dependencies/>
-                    <tags/>
-                </trigger_prototype>
-            {% endfor %}
-        </trigger_prototypes>
-        <graph_prototypes>
-            {% for graph in graphs %}
-                <graph_prototype>
-                    <name>VHA Agent[{{ '{#' }}LOCATION}] &gt; {{ graph.name|e }}</name>
-                    <width>900</width>
-                    <height>200</height>
-                    <yaxismin>0.0000</yaxismin>
-                    <yaxismax>100.0000</yaxismax>
-                    <show_work_period>1</show_work_period>
-                    <show_triggers>1</show_triggers>
-                    <type>{{ graph.type|default(0) }}</type>
-                    <show_legend>1</show_legend>
-                    <show_3d>0</show_3d>
-                    <percent_left>0.0000</percent_left>
-                    <percent_right>0.0000</percent_right>
-                    <ymin_type_1>0</ymin_type_1>
-                    <ymax_type_1>0</ymax_type_1>
-                    <ymin_item_1>0</ymin_item_1>
-                    <ymax_item_1>0</ymax_item_1>
-                    <graph_items>
-                        {% for gitem in graph['items'] %}
-                            <graph_item>
-                                <sortorder>{{ loop.index0 }}</sortorder>
-                                <drawtype>{{ gitem.drawtype|default(0) }}</drawtype>
-                                <color>{{ gitem.color }}</color>
-                                <yaxisside>{{ gitem.yaxisside|default(0) }}</yaxisside>
-                                <calc_fnc>{{ gitem.calc_fnc|default(2) }}</calc_fnc>
-                                <type>0</type>
-                                <item>
-                                    <host>Template App {{ name }}</host>
-                                    <key>{{ gitem.key|e }}</key>
-                                </item>
-                            </graph_item>
-                        {% endfor %}
-                    </graph_items>
-                </graph_prototype>
-            {% endfor %}
-        </graph_prototypes>
-    </discovery_rule>
-{%- endmacro -%}
-
-{#-#########################################################################-#}
-{#- MAIN -#}
-{#-#########################################################################-#}
-
-<?xml version="1.0" encoding="UTF-8"?>
-<zabbix_export>
-    <version>{{ version }}</version>
-    <date>2018-10-26T13:42:30Z</date>
-    <groups>
-        <group>
-            <name>Templates</name>
-        </group>
-    </groups>
-    <templates>
-        <template>
-            <template>Template App {{ name }}</template>
-            <name>Template App {{ name }}</name>
-            <description/>
-            <groups>
-                <group>
-                    <name>Templates</name>
-                </group>
-            </groups>
-            <applications>
-                <application>
-                    <name>VHA Agent</name>
-                </application>
-            </applications>
-            <templates/>
-            <screens/>
-            <httptests/>
-            {% if version == '4.2' %}
-                <tags>
-                    <tag>
-                        <tag>App</tag>
-                        <value>VHA Agent</value>
-                    </tag>
-                </tags>
-            {% endif %}
-
-            {#-#############################################################-#}
-            {#- ITEMS -#}
-            {#-#############################################################-#}
-
-            <items>
-                {% for item in [
-                        {
-                            'name': 'stats',
-                            'key': master,
-                            'context': 'stats',
-                            'trends': false,
-                            'value_type': 4,
-                        },
-                        {
-                            'name': '$1 processes',
-                            'key': 'proc.num[vha-agent]',
-                            'context': 'proc.num-vha-agent',
-                            'value_type': 3,
-                        },
-                    ] %}
-                    <item>
-                        <name>VHA Agent - {{ item.name|e }}</name>
-                        <type>7</type>
+                    {% if version in ('4.0', '4.2') %}
                         <snmp_community/>
                         <snmp_oid/>
-                        <key>{{ item.key|e }}</key>
-                        <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL:{{ item.context }}}</delay>
-                        <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:{{ item.context }}}</history>
-                        {% if 'trends' in item and not item.trends %}
-                            <trends>0</trends>
-                        {% else %}
-                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:{{ item.context }}}</trends>
-                        {% endif %}
                         <status>0</status>
-                        <value_type>{{ item.value_type }}</value_type>
                         <allowed_hosts/>
-                        <units/>
                         <snmpv3_contextname/>
                         <snmpv3_securityname/>
                         <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -300,7 +263,6 @@
                         <snmpv3_authpassphrase/>
                         <snmpv3_privprotocol>0</snmpv3_privprotocol>
                         <snmpv3_privpassphrase/>
-                        <params/>
                         <ipmi_sensor/>
                         <authtype>0</authtype>
                         <username/>
@@ -310,14 +272,8 @@
                         <port/>
                         <description/>
                         <inventory_link>0</inventory_link>
-                        <applications>
-                            <application>
-                                <name>VHA Agent</name>
-                            </application>
-                        </applications>
                         <valuemap/>
                         <logtimefmt/>
-                        <preprocessing/>
                         <jmx_endpoint/>
                         <timeout>3s</timeout>
                         <url/>
@@ -337,7 +293,213 @@
                         <ssl_key_password/>
                         <verify_peer>0</verify_peer>
                         <verify_host>0</verify_host>
-                        <master_item/>
+                        <application_prototypes/>
+                    {% endif %}
+                </item_prototype>
+            {% endfor %}
+        </item_prototypes>
+        <trigger_prototypes>
+            {% for definition in triggers %}
+                <trigger_prototype>
+                    {{ trigger(definition) }}
+                </trigger_prototype>
+            {% endfor %}
+        </trigger_prototypes>
+        <graph_prototypes>
+            {% for graph in graphs %}
+                <graph_prototype>
+                    <name>VHA Agent[{{ '{#' }}LOCATION}] &gt; {{ graph.name|e }}</name>
+                    <type>{{ graph_type(graph.type|default('NORMAL')) }}</type>
+                    <graph_items>
+                        {% for gitem in graph['items'] %}
+                            <graph_item>
+                                <sortorder>{{ loop.index0 }}</sortorder>
+                                <drawtype>{{ graph_item_drawtype(gitem.drawtype|default('SINGLE_LINE')) }}</drawtype>
+                                <color>{{ gitem.color }}</color>
+                                <yaxisside>{{ graph_item_yaxisside(gitem.yaxisside|default('LEFT')) }}</yaxisside>
+                                <calc_fnc>{{ graph_item_calc_fnc(gitem.calc_fnc|default('AVG')) }}</calc_fnc>
+                                <item>
+                                    <host>Template App {{ name }}</host>
+                                    <key>{{ gitem.key|e }}</key>
+                                </item>
+                                {% if version in ('4.0', '4.2') %}
+                                    <type>0</type>
+                                {% endif %}
+                            </graph_item>
+                        {% endfor %}
+                    </graph_items>
+                    {% if version in ('4.0', '4.2') %}
+                        <width>900</width>
+                        <height>200</height>
+                        <yaxismin>0.0000</yaxismin>
+                        <yaxismax>100.0000</yaxismax>
+                        <show_work_period>1</show_work_period>
+                        <show_triggers>1</show_triggers>
+                        <show_legend>1</show_legend>
+                        <show_3d>0</show_3d>
+                        <percent_left>0.0000</percent_left>
+                        <percent_right>0.0000</percent_right>
+                        <ymin_type_1>0</ymin_type_1>
+                        <ymax_type_1>0</ymax_type_1>
+                        <ymin_item_1>0</ymin_item_1>
+                        <ymax_item_1>0</ymax_item_1>
+                    {% endif %}
+                </graph_prototype>
+            {% endfor %}
+        </graph_prototypes>
+    </discovery_rule>
+{%- endmacro -%}
+
+{#-#########################################################################-#}
+{#- TRIGGERS -#}
+{#-#########################################################################-#}
+
+{%- set vha_agent_processes_trigger =
+    {
+        'name': 'VHA Agent is not running',
+        'expression':
+            '{Template App ' + name + ':proc.num[vha-agent].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:proc.num-vha-agent})}'
+            '<{$VHA_AGENT.PROCESSES.MIN}',
+        'priority': 'DISASTER',
+    } -%}
+
+{#-#########################################################################-#}
+{#- MAIN -#}
+{#-#########################################################################-#}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>{{ version }}</version>
+    <date>2018-10-26T13:42:30Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template App {{ name }}</template>
+            <name>Template App {{ name }}</name>
+            {% if version in ('4.0', '4.2') %}
+                <description/>
+            {% endif %}
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>VHA Agent</name>
+                </application>
+            </applications>
+            <templates/>
+            <screens/>
+            <httptests/>
+            {% if version in ('4.2', '4.4') %}
+                <tags>
+                    <tag>
+                        <tag>App</tag>
+                        <value>VHA Agent</value>
+                    </tag>
+                </tags>
+            {% endif %}
+
+            {#-#############################################################-#}
+            {#- ITEMS -#}
+            {#-#############################################################-#}
+
+            <items>
+                {% for item in [
+                        {
+                            'name': 'stats',
+                            'key': master,
+                            'context': 'stats',
+                            'trends': false,
+                            'value_type': 'TEXT',
+                            'triggers': [],
+                        },
+                        {
+                            'name': '$1 processes',
+                            'key': 'proc.num[vha-agent]',
+                            'context': 'proc.num-vha-agent',
+                            'value_type': 'UNSIGNED',
+                            'triggers': [vha_agent_processes_trigger],
+                        },
+                    ] %}
+                    <item>
+                        <name>VHA Agent - {{ item.name|e }}</name>
+                        <type>{{ item_type('ZABBIX_ACTIVE') }}</type>
+                        <key>{{ item.key|e }}</key>
+                        <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL:{{ item.context }}}</delay>
+                        <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:{{ item.context }}}</history>
+                        {% if 'trends' in item and not item.trends %}
+                            <trends>0</trends>
+                        {% else %}
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:{{ item.context }}}</trends>
+                        {% endif %}
+                        <value_type>{{ item_value_type(item.value_type) }}</value_type>
+                        <applications>
+                            <application>
+                                <name>VHA Agent</name>
+                            </application>
+                        </applications>
+                        {% if version in ('4.0', '4.2') %}
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <status>0</status>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <master_item/>
+                        {% endif %}
+                        {% if version == '4.4' and item.triggers %}
+                            <triggers>
+                                {% for definition in item.triggers %}
+                                    <trigger>
+                                        {{ trigger(definition) }}
+                                    </trigger>
+                                {% endfor %}
+                            </triggers>
+                        {% endif %}
                     </item>
                 {% endfor %}
             </items>
@@ -360,127 +522,127 @@
                     [
                         {
                             'name': 'n_backlog (total length of all waiting lists of requests)',
-                            'type': 18,
+                            'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_backlog"]',
                             'context': 'items:n_backlog',
-                            'value_type': 3,
+                            'value_type': 'UNSIGNED',
                             'master_item_key': master,
                             'preprocessing': [
                                 {
-                                    'type': 12,
+                                    'type': 'JSONPATH',
                                     'params': '$[\'{#LOCATION_ID}.n_backlog\']',
-                                    'error_handler': 1,
+                                    'error_handler': 'DISCARD_VALUE',
                                 },
                             ],
                         },
                         {
                             'name': 'n_dropped (requests dropped due to backlog limit / sec)',
-                            'type': 18,
+                            'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_dropped"]',
                             'context': 'items:n_dropped',
-                            'value_type': 0,
+                            'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
                             'preprocessing': [
                                 {
-                                    'type': 12,
+                                    'type': 'JSONPATH',
                                     'params': '$[\'{#LOCATION_ID}.n_dropped\']',
-                                    'error_handler': 1,
+                                    'error_handler': 'DISCARD_VALUE',
                                 },
                                 {
-                                    'type': 10,
+                                    'type': 'CHANGE_PER_SECOND',
                                 },
                             ],
                         },
                         {
                             'name': 'n_insert (VSL transactions in which a new object was inserted / sec)',
-                            'type': 18,
+                            'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_insert"]',
                             'context': 'items:n_insert',
-                            'value_type': 0,
+                            'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
                             'preprocessing': [
                                 {
-                                    'type': 12,
+                                    'type': 'JSONPATH',
                                     'params': '$[\'{#LOCATION_ID}.n_insert\']',
-                                    'error_handler': 1,
+                                    'error_handler': 'DISCARD_VALUE',
                                 },
                                 {
-                                    'type': 10,
+                                    'type': 'CHANGE_PER_SECOND',
                                 },
                             ],
                         },
                         {
                             'name': 'n_req_failed (failed peer notifications / sec)',
-                            'type': 18,
+                            'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_req_failed"]',
                             'context': 'items:n_req_failed',
-                            'value_type': 0,
+                            'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
                             'preprocessing': [
                                 {
-                                    'type': 12,
+                                    'type': 'JSONPATH',
                                     'params': '$[\'{#LOCATION_ID}.n_req_failed\']',
-                                    'error_handler': 1,
+                                    'error_handler': 'DISCARD_VALUE',
                                 },
                                 {
-                                    'type': 10,
+                                    'type': 'CHANGE_PER_SECOND',
                                 },
                             ],
                         },
                         {
                             'name': 'n_req_total (peer notifications / sec)',
-                            'type': 18,
+                            'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_req_total"]',
                             'context': 'items:n_req_total',
-                            'value_type': 0,
+                            'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
                             'preprocessing': [
                                 {
-                                    'type': 12,
+                                    'type': 'JSONPATH',
                                     'params': '$[\'{#LOCATION_ID}.n_req_total\']',
-                                    'error_handler': 1,
+                                    'error_handler': 'DISCARD_VALUE',
                                 },
                                 {
-                                    'type': 10,
+                                    'type': 'CHANGE_PER_SECOND',
                                 },
                             ],
                         },
                         {
                             'name': 'n_trans (VSL transactions processed / sec)',
-                            'type': 18,
+                            'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_trans"]',
                             'context': 'items:n_trans',
-                            'value_type': 0,
+                            'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
                             'preprocessing': [
                                 {
-                                    'type': 12,
+                                    'type': 'JSONPATH',
                                     'params': '$[\'{#LOCATION_ID}.n_trans\']',
-                                    'error_handler': 1,
+                                    'error_handler': 'DISCARD_VALUE',
                                 },
                                 {
-                                    'type': 10,
+                                    'type': 'CHANGE_PER_SECOND',
                                 },
                             ],
                         },
                         {
                             'name': 'uptime',
-                            'type': 18,
+                            'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","uptime"]',
                             'context': 'items:uptime',
-                            'value_type': 3,
+                            'value_type': 'UNSIGNED',
                             'units': 'uptime',
                             'master_item_key': master,
                             'preprocessing': [
                                 {
-                                    'type': 12,
+                                    'type': 'JSONPATH',
                                     'params': '$[\'{#LOCATION_ID}.uptime\']',
-                                    'error_handler': 1,
+                                    'error_handler': 'DISCARD_VALUE',
                                 },
                             ],
                         },
@@ -488,25 +650,25 @@
                     ],
                     [
                         {
-                            'name': 'has been restarted',
+                            'name': 'VHA Agent[{#LOCATION}] has been restarted',
                             'expression':
                                 '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","uptime"].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:uptime})}'
                                 '<{$VHA_AGENT.UPTIME.MIN}',
-                            'priority': 4,
+                            'priority': 'HIGH',
                         },
                         {
-                            'name': 'is dropping requests',
+                            'name': 'VHA Agent[{#LOCATION}] is dropping requests',
                             'expression':
                                 '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_dropped"].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_dropped})}'
                                 '>{$VHA_AGENT.N_DROPPED.MAX}',
-                            'priority': 2,
+                            'priority': 'WARNING',
                         },
                         {
-                            'name': 'is failing to notify peers',
+                            'name': 'VHA Agent[{#LOCATION}] is failing to notify peers',
                             'expression':
                                 '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_req_failed"].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_req_failed})}'
                                 '>{$VHA_AGENT.N_REQ_FAILED.MAX}',
-                            'priority': 2,
+                            'priority': 'WARNING',
                         },
                     ],
                     [
@@ -578,16 +740,16 @@
                     [
                         {
                             'name': 'n_backlog_{#SUBJECT} (length of the waiting list of requests for a neighbor)',
-                            'type': 18,
+                            'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_backlog_{#SUBJECT_ID}"]',
                             'context': 'backlogs:n_backlog',
-                            'value_type': 3,
+                            'value_type': 'UNSIGNED',
                             'master_item_key': master,
                             'preprocessing': [
                                 {
-                                    'type': 12,
+                                    'type': 'JSONPATH',
                                     'params': '$[\'{#LOCATION_ID}.n_backlog_{#SUBJECT_ID}\']',
-                                    'error_handler': 1,
+                                    'error_handler': 'DISCARD_VALUE',
                                 },
                             ],
                         },
@@ -641,31 +803,15 @@
     {#- TRIGGERS -#}
     {#-#####################################################################-#}
 
-    <triggers>
-        {% for trigger in [
-                {
-                    'name': 'VHA Agent is not running',
-                    'expression':
-                        '{Template App ' + name + ':proc.num[vha-agent].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:proc.num-vha-agent})}'
-                        '<{$VHA_AGENT.PROCESSES.MIN}',
-                },
-            ] %}
-            <trigger>
-                <expression>{{ trigger.expression|e }}</expression>
-                <recovery_mode>0</recovery_mode>
-                <recovery_expression/>
-                <name>{{ trigger.name|e }}</name>
-                <correlation_mode>0</correlation_mode>
-                <correlation_tag/>
-                <url/>
-                <status>0</status>
-                <priority>5</priority>
-                <description/>
-                <type>0</type>
-                <manual_close>0</manual_close>
-                <dependencies/>
-                <tags/>
-            </trigger>
-        {% endfor %}
-    </triggers>
+    {% if version in ('4.0', '4.2') %}
+        <triggers>
+            {% for definition in [
+                    vha_agent_processes_trigger,
+                ] %}
+                <trigger>
+                    {{ trigger(definition) }}
+                </trigger>
+            {% endfor %}
+        </triggers>
+    {% endif %}
 </zabbix_export>
