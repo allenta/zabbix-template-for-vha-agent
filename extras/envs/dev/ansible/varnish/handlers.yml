@@ -1,5 +1,0 @@
-- name: Restart VHA Agent service
-  listen: restart-vha-agent
-  service:
-    name: vha-agent
-    state: restarted
