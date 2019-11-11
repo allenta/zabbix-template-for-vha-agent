@@ -136,8 +136,8 @@
         <name>{{ rule.name|e }}</name>
         <type>{{ item_type('ZABBIX_ACTIVE') }}</type>
         <key>{{ rule.key|e }}</key>
-        <delay>{$VHA_AGENT.LLD_UPDATE_INTERVAL:{{ rule.context }}}</delay>
-        <lifetime>{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD:{{ rule.context }}}</lifetime>
+        <delay>{$VHA_AGENT.LLD_UPDATE_INTERVAL:&quot;{{ rule.context }}&quot;}</delay>
+        <lifetime>{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD:&quot;{{ rule.context }}&quot;}</lifetime>
         {% if version in ('4.0', '4.2') %}
             <snmp_community/>
             <snmp_oid/>
@@ -196,15 +196,19 @@
                     <type>{{ item_type(item.type) }}</type>
                     <key>{{ item.key|e }}</key>
                     {% if 'delay' in item and item.delay %}
-                        <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL:{{ item.context }}}</delay>
+                        <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL}</delay>
                     {% else %}
                         <delay>0</delay>
                     {% endif %}
-                    <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:{{ item.context }}}</history>
+                    {% if 'history' in item and not item.history %}
+                        <history>0</history>
+                    {% else %}
+                        <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD}</history>
+                    {% endif %}
                     {% if 'trends' in item and not item.trends %}
                         <trends>0</trends>
                     {% else %}
-                        <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:{{ item.context }}}</trends>
+                        <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD}</trends>
                     {% endif %}
                     <value_type>{{ item_value_type(item.value_type) }}</value_type>
                     <units>{{ item.units|default('')|e }}</units>
@@ -344,7 +348,7 @@
     {
         'name': 'VHA Agent is not running',
         'expression':
-            '{Template App ' + name + ':proc.num[vha-agent].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:proc.num-vha-agent})}'
+            '{Template App ' + name + ':proc.num[vha-agent].max(#1)}'
             '<{$VHA_AGENT.PROCESSES.MIN}',
         'priority': 'DISASTER',
     } -%}
@@ -400,7 +404,7 @@
                         {
                             'name': 'stats',
                             'key': master,
-                            'context': 'stats',
+                            'history': false,
                             'trends': false,
                             'value_type': 'TEXT',
                             'triggers': [],
@@ -408,7 +412,6 @@
                         {
                             'name': '$1 processes',
                             'key': 'proc.num[vha-agent]',
-                            'context': 'proc.num-vha-agent',
                             'value_type': 'UNSIGNED',
                             'triggers': [vha_agent_processes_trigger],
                         },
@@ -417,12 +420,16 @@
                         <name>VHA Agent - {{ item.name|e }}</name>
                         <type>{{ item_type('ZABBIX_ACTIVE') }}</type>
                         <key>{{ item.key|e }}</key>
-                        <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL:{{ item.context }}}</delay>
-                        <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:{{ item.context }}}</history>
+                        <delay>{$VHA_AGENT.ITEM_UPDATE_INTERVAL}</delay>
+                        {% if 'history' in item and not item.history %}
+                            <history>0</history>
+                        {% else %}
+                            <history>{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD}</history>
+                        {% endif %}
                         {% if 'trends' in item and not item.trends %}
                             <trends>0</trends>
                         {% else %}
-                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD:{{ item.context }}}</trends>
+                            <trends>{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD}</trends>
                         {% endif %}
                         <value_type>{{ item_value_type(item.value_type) }}</value_type>
                         <applications>
@@ -510,7 +517,6 @@
                             'name': 'n_backlog (total length of all waiting lists of requests)',
                             'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_backlog"]',
-                            'context': 'items:n_backlog',
                             'value_type': 'UNSIGNED',
                             'master_item_key': master,
                             'preprocessing': [
@@ -525,7 +531,6 @@
                             'name': 'n_dropped (requests dropped due to backlog limit / sec)',
                             'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_dropped"]',
-                            'context': 'items:n_dropped',
                             'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
@@ -544,7 +549,6 @@
                             'name': 'n_insert (VSL transactions in which a new object was inserted / sec)',
                             'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_insert"]',
-                            'context': 'items:n_insert',
                             'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
@@ -563,7 +567,6 @@
                             'name': 'n_req_failed (failed peer notifications / sec)',
                             'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_req_failed"]',
-                            'context': 'items:n_req_failed',
                             'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
@@ -582,7 +585,6 @@
                             'name': 'n_req_total (peer notifications / sec)',
                             'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_req_total"]',
-                            'context': 'items:n_req_total',
                             'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
@@ -601,7 +603,6 @@
                             'name': 'n_trans (VSL transactions processed / sec)',
                             'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_trans"]',
-                            'context': 'items:n_trans',
                             'value_type': 'FLOAT',
                             'units': 'eps',
                             'master_item_key': master,
@@ -620,7 +621,6 @@
                             'name': 'uptime',
                             'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","uptime"]',
-                            'context': 'items:uptime',
                             'value_type': 'UNSIGNED',
                             'units': 'uptime',
                             'master_item_key': master,
@@ -638,22 +638,22 @@
                         {
                             'name': 'VHA Agent[{#LOCATION}] has been restarted',
                             'expression':
-                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","uptime"].max({$VHA_AGENT.LAST_VALUES_TO_CHECK:uptime})}'
-                                '<{$VHA_AGENT.UPTIME.MIN}',
+                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","uptime"].max(#1)}'
+                                '<{$VHA_AGENT.UPTIME.MIN:"{#LOCATION_ID}"}',
                             'priority': 'HIGH',
                         },
                         {
                             'name': 'VHA Agent[{#LOCATION}] is dropping requests',
                             'expression':
-                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_dropped"].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_dropped})}'
-                                '>{$VHA_AGENT.N_DROPPED.MAX}',
+                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_dropped"].min({$VHA_AGENT.N_DROPPED.SAMPLES:"{#LOCATION_ID}"})}'
+                                '>{$VHA_AGENT.N_DROPPED.MAX:"{#LOCATION_ID}"}',
                             'priority': 'WARNING',
                         },
                         {
                             'name': 'VHA Agent[{#LOCATION}] is failing to notify peers',
                             'expression':
-                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_req_failed"].min({$VHA_AGENT.LAST_VALUES_TO_CHECK:n_req_failed})}'
-                                '>{$VHA_AGENT.N_REQ_FAILED.MAX}',
+                                '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_req_failed"].min({$VHA_AGENT.N_REQ_FAILED.SAMPLES:"{#LOCATION_ID}"})}'
+                                '>{$VHA_AGENT.N_REQ_FAILED.MAX:"{#LOCATION_ID}"}',
                             'priority': 'WARNING',
                         },
                     ],
@@ -728,7 +728,6 @@
                             'name': 'n_backlog_{#SUBJECT} (length of the waiting list of requests for a neighbor)',
                             'type': 'DEPENDENT',
                             'key': 'vha_agent.stat["{#LOCATION_ID}","n_backlog_{#SUBJECT_ID}"]',
-                            'context': 'backlogs:n_backlog',
                             'value_type': 'UNSIGNED',
                             'master_item_key': master,
                             'preprocessing': [
@@ -761,19 +760,21 @@
 
             <macros>
                 {% for macro in [
-                        ('{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD:stats}', '0'),
+                        ('{$VHA_AGENT.LOCATIONS}', ''),
+
+                        ('{$VHA_AGENT.PROCESSES.MIN}', '1'),
+
+                        ('{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD}', '30d'),
+                        ('{$VHA_AGENT.LLD_UPDATE_INTERVAL}', '1h'),
+
                         ('{$VHA_AGENT.ITEM_HISTORY_STORAGE_PERIOD}', '30d'),
                         ('{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD}', '365d'),
                         ('{$VHA_AGENT.ITEM_UPDATE_INTERVAL}', '60s'),
-                        ('{$VHA_AGENT.LAST_VALUES_TO_CHECK}', '#1'),
-                        ('{$VHA_AGENT.LAST_VALUES_TO_CHECK:n_dropped}', '#10'),
-                        ('{$VHA_AGENT.LAST_VALUES_TO_CHECK:n_req_failed}', '#10'),
-                        ('{$VHA_AGENT.LLD_KEEP_LOST_RESOURCES_PERIOD}', '30d'),
-                        ('{$VHA_AGENT.LLD_UPDATE_INTERVAL}', '1h'),
-                        ('{$VHA_AGENT.LOCATIONS}', ''),
+
                         ('{$VHA_AGENT.N_DROPPED.MAX}', '0.0'),
+                        ('{$VHA_AGENT.N_DROPPED.SAMPLES}', '#10'),
                         ('{$VHA_AGENT.N_REQ_FAILED.MAX}', '0.0'),
-                        ('{$VHA_AGENT.PROCESSES.MIN}', '1'),
+                        ('{$VHA_AGENT.N_REQ_FAILED.SAMPLES}', '#10'),
                         ('{$VHA_AGENT.UPTIME.MIN}', '10m'),
                     ] %}
                     <macro>
