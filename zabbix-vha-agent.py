@@ -3,7 +3,7 @@
 
 '''
 :url: https://github.com/allenta/zabbix-template-for-vha-agent
-:copyright: (c) 2016-2019 by Allenta Consulting S.L. <info@allenta.com>.
+:copyright: (c) 2016-2020 by Allenta Consulting S.L. <info@allenta.com>.
 :license: BSD, see LICENSE.txt for more details.
 '''
 
