@@ -661,6 +661,7 @@
                         {
                             'name': 'VHA Agent[{#LOCATION}] is dropping requests',
                             'expression':
+                                '{$VHA_AGENT.N_DROPPED.ENABLED:"{#LOCATION_ID}"} and '
                                 '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_dropped"].min({$VHA_AGENT.N_DROPPED.SAMPLES:"{#LOCATION_ID}"})}'
                                 '>{$VHA_AGENT.N_DROPPED.MAX:"{#LOCATION_ID}"}',
                             'priority': 'WARNING',
@@ -668,6 +669,7 @@
                         {
                             'name': 'VHA Agent[{#LOCATION}] is failing to notify peers',
                             'expression':
+                                '{$VHA_AGENT.N_REQ_FAILED.ENABLED:"{#LOCATION_ID}"} and '
                                 '{Template App ' + name + ':vha_agent.stat["{#LOCATION_ID}","n_req_failed"].min({$VHA_AGENT.N_REQ_FAILED.SAMPLES:"{#LOCATION_ID}"})}'
                                 '>{$VHA_AGENT.N_REQ_FAILED.MAX:"{#LOCATION_ID}"}',
                             'priority': 'WARNING',
@@ -787,8 +789,10 @@
                         ('{$VHA_AGENT.ITEM_TREND_STORAGE_PERIOD}', '365d'),
                         ('{$VHA_AGENT.ITEM_UPDATE_INTERVAL}', '60s'),
 
+                        ('{$VHA_AGENT.N_DROPPED.ENABLED}', '1'),
                         ('{$VHA_AGENT.N_DROPPED.MAX}', '0.0'),
                         ('{$VHA_AGENT.N_DROPPED.SAMPLES}', '#10'),
+                        ('{$VHA_AGENT.N_REQ_FAILED.ENABLED}', '1'),
                         ('{$VHA_AGENT.N_REQ_FAILED.MAX}', '0.0'),
                         ('{$VHA_AGENT.N_REQ_FAILED.SAMPLES}', '#10'),
                         ('{$VHA_AGENT.UPTIME.MIN}', '10m'),
