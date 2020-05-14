@@ -263,7 +263,7 @@ def _stats(location, default_vha_agent_status_file):
 
 def _safe_zabbix_string(value):
     # Return a modified version of 'value' safe to be used as part of:
-    #   - A quoted key parameter (see https://www.zabbix.com/documentation/4.0/manual/config/items/item/key).
+    #   - A quoted key parameter (see https://www.zabbix.com/documentation/5.0/manual/config/items/item/key).
     #   - A JSON string.
     return value.replace('"', '\\"')
 
