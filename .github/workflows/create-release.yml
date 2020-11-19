@@ -41,6 +41,7 @@ jobs:
           - '4.2'
           - '4.4'
           - '5.0'
+          - '5.2'
 
     steps:
       - uses: actions/checkout@v2
@@ -56,7 +57,7 @@ jobs:
           pip install jinja2-cli
 
       - name: Extract tag name
-        run: echo ::set-env name=TAG_NAME::${GITHUB_REF/refs\/tags\//}
+        run: echo "TAG_NAME=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Generate template
         run: |
